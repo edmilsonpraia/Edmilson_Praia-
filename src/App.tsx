@@ -1821,7 +1821,7 @@ const Portfolio: React.FC = () => {
                 margin: 0,
                 textAlign: 'center'
               }}>
-                ℹ️ <strong>Primeiro envio:</strong> Você receberá um email de confirmação do Formspree para ativar o formulário.
+                ℹ️ <strong>Somos Eternos</strong> Aprendizes.
               </p>
             </div>
             
