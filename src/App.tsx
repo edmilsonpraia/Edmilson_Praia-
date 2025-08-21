@@ -285,8 +285,8 @@ const Portfolio: React.FC = () => {
               maxWidth: isMobile ? '100%' : '600px'
             }}>
               {isMobile 
-                ? 'Especialista em geologia aplicada e geofísica. Pioneiro em soluções de IA para análise de reservatórios de petróleo.'
-                : 'Especialista em geologia aplicada e geofísica com doutorado avançado em geofísica aplicada. Pioneiro em soluções baseadas em IA para análise de reservatórios de petróleo e interpretação de dados petrofísicos.'
+                ? 'Especialista em geologia aplicada e geofísica. Precursor em soluções de IA para análise de reservatórios de petróleo.'
+                : 'Especialista em geologia aplicada e geofísica com doutorado avançado em geofísica aplicada. Precursor em soluções baseadas em IA para análise de reservatórios de petróleo e interpretação de dados petrofísicos.'
               }
             </p>
             
@@ -411,7 +411,7 @@ const Portfolio: React.FC = () => {
                 backdropFilter: isMobile ? 'blur(10px)' : 'none'
               }}>
                 <MapPin size={16} />
-                Ufa, Rússia
+                Ufa, Rússia - Luanda, Angola
               </div>
             </div>
           </div>
@@ -535,7 +535,7 @@ const Portfolio: React.FC = () => {
                     { label: 'Posição Atual', value: 'Fundador & Consultor Principal' },
                     { label: 'Especialização', value: 'Geofísica Aplicada' },
                     { label: 'Formação', value: 'Doutorado em Geofísica Aplicada' },
-                    { label: 'Localização', value: 'Ufa, Rússia' }
+                    { label: 'Localização', value: 'Ufa, Rússia - Luanda, Angola' }
                   ].map((item, index) => (
                     <div key={index} style={{
                       display: 'flex',
@@ -1605,7 +1605,7 @@ const Portfolio: React.FC = () => {
               {
                 icon: MapPin,
                 title: 'Localização',
-                primary: 'Ufa, Rússia',
+                primary: 'Ufa, Rússia - Luanda, Angola',
                 secondary: 'Consultoria internacional disponível',
                 color: '#f87171'
               }
