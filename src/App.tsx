@@ -281,8 +281,9 @@ const Portfolio: React.FC = () => {
               marginBottom: isMobile ? '32px' : '40px',
               maxWidth: '600px'
             }}>
-              Especialista em geologia aplicada e geofísica com doutorado avançado em geofísica aplicada. 
-              Pioneiro em soluções baseadas em IA para análise de reservatórios de petróleo e interpretação de dados petrofísicos.
+              Especialista em Geologia Aplicada ao Petróleo e Gás com doutorado em Geofísica Aplicada, combinando sólida
+              formação acadêmica com experiência prática em análise de dados e educação técnica.Analista de Dados na WellDesk,
+              com expertise comprovada em modelagem geológica, reservatórios e IA.
             </p>
             
             <div style={{
@@ -370,7 +371,7 @@ const Portfolio: React.FC = () => {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <MapPin size={16} />
-                Ufa, Rússia
+                Ufa, Rússia - Luanda, Angola
               </div>
             </div>
           </div>
@@ -487,7 +488,7 @@ const Portfolio: React.FC = () => {
                     { label: 'Posição Atual', value: 'Fundador & Consultor Principal' },
                     { label: 'Especialização', value: 'Geofísica Aplicada' },
                     { label: 'Formação', value: 'Doutorado em Geofísica Aplicada' },
-                    { label: 'Localização', value: 'Ufa, Rússia' }
+                    { label: 'Localização', value: 'Ufa, Rússia - Luanda, Angola' }
                   ].map((item, index) => (
                     <div key={index} style={{
                       display: 'flex',
@@ -1557,7 +1558,7 @@ const Portfolio: React.FC = () => {
               {
                 icon: MapPin,
                 title: 'Localização',
-                primary: 'Ufa, Rússia',
+                primary: 'Ufa, Rússia - Luanda, Angola',
                 secondary: 'Consultoria internacional disponível',
                 color: '#f87171'
               }
