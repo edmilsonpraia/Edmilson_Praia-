@@ -8,8 +8,6 @@ const Portfolio: React.FC = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [showConsultationForm, setShowConsultationForm] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [submitted, setSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1200);
@@ -28,23 +26,6 @@ const Portfolio: React.FC = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-  };
-
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simular envio - O Formspree irá lidar com o envio real
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-      
-      // Fechar o modal após 3 segundos
-      setTimeout(() => {
-        setShowConsultationForm(false);
-        setSubmitted(false);
-      }, 3000);
-    }, 1000);
   };
 
   if (isLoading) {
@@ -1774,61 +1755,40 @@ const Portfolio: React.FC = () => {
               fontSize: '14px',
               color: '#64748b',
               textAlign: 'center',
-              marginBottom: '32px'
+              marginBottom: '24px'
             }}>
               Preencha o formulário abaixo e entrarei em contato em até 24 horas
             </p>
             
-            {submitted ? (
-              <div style={{
-                textAlign: 'center',
-                padding: '40px 20px'
+            <div style={{
+              backgroundColor: '#eff6ff',
+              border: '1px solid #3b82f6',
+              borderRadius: '8px',
+              padding: '12px 16px',
+              marginBottom: '24px'
+            }}>
+              <p style={{
+                fontSize: '13px',
+                color: '#1e40af',
+                margin: 0,
+                textAlign: 'center'
               }}>
-                <div style={{
-                  width: '64px',
-                  height: '64px',
-                  backgroundColor: '#10b981',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 24px'
-                }}>
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                    <polyline points="20,6 9,17 4,12"></polyline>
-                  </svg>
-                </div>
-                <h3 style={{
-                  fontSize: '24px',
-                  fontWeight: '700',
-                  color: '#0f172a',
-                  marginBottom: '12px'
-                }}>
-                  Solicitação Enviada!
-                </h3>
-                <p style={{
-                  fontSize: '16px',
-                  color: '#64748b',
-                  lineHeight: '1.6'
-                }}>
-                  Obrigado pelo seu interesse! Entrarei em contato em até 24 horas para discutir os detalhes da consultoria.
-                </p>
-              </div>
-            ) : (
+                ℹ️ <strong>Primeiro envio:</strong> Você receberá um email de confirmação do Formspree para ativar o formulário.
+              </p>
+            </div>
+            
             <form 
-              onSubmit={handleFormSubmit}
-              action="https://formspree.io/f/YOUR_FORM_ID" 
+              action="https://formspree.io/f/manbrwvn" 
               method="POST"
               style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
             >
               {/* 
-                CONFIGURAÇÃO DO FORMSPREE:
-                1. Vá para https://formspree.io e crie uma conta
-                2. Crie um novo projeto chamado "Consulta"
-                3. Substitua "YOUR_FORM_ID" pelo ID do seu formulário
-                4. Para produção, remova onSubmit={handleFormSubmit} 
-                   e deixe apenas action e method
-                5. O formulário enviará automaticamente para seu email
+                ✅ FORMSPREE TOTALMENTE CONFIGURADO!
+                
+                O formulário agora envia diretamente para:
+                https://formspree.io/f/manbrwvn
+                
+                Todas as mensagens serão enviadas para seu email automaticamente!
               */}
               {/* 
                 CONFIGURAÇÃO DO FORMSPREE:
@@ -2086,55 +2046,43 @@ const Portfolio: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  onClick={() => {
+                    // Fechar modal após pequeno delay para permitir o envio
+                    setTimeout(() => setShowConsultationForm(false), 100);
+                  }}
                   style={{
                     padding: '12px 24px',
                     border: 'none',
                     borderRadius: '8px',
-                    backgroundColor: isSubmitting ? '#9ca3af' : '#1e40af',
+                    backgroundColor: '#1e40af',
                     color: 'white',
                     fontSize: '14px',
                     fontWeight: '600',
-                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                    cursor: 'pointer',
                     transition: 'all 0.3s ease',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
                     justifyContent: 'center'
                   }}
-                  onMouseOver={(e) => {
-                    if (!isSubmitting) {
-                      e.currentTarget.style.backgroundColor = '#1d4ed8';
-                    }
-                  }}
-                  onMouseOut={(e) => {
-                    if (!isSubmitting) {
-                      e.currentTarget.style.backgroundColor = '#1e40af';
-                    }
-                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1d4ed8'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#1e40af'}
                 >
-                  {isSubmitting ? (
-                    <>
-                      <div style={{
-                        width: '16px',
-                        height: '16px',
-                        border: '2px solid rgba(255, 255, 255, 0.3)',
-                        borderTop: '2px solid white',
-                        borderRadius: '50%',
-                        animation: 'spin 1s linear infinite'
-                      }}></div>
-                      Enviando...
-                    </>
-                  ) : (
-                    <>
-                      <Send size={16} />
-                      Enviar Solicitação
-                    </>
-                  )}
+                  <Send size={16} />
+                  Enviar Solicitação
                 </button>
               </div>
+              
+              <p style={{
+                fontSize: '11px',
+                color: '#9ca3af',
+                textAlign: 'center',
+                marginTop: '16px',
+                lineHeight: '1.4'
+              }}>
+                Ao enviar este formulário, você concorda que seus dados sejam utilizados exclusivamente para responder à sua solicitação de consultoria. Não compartilhamos informações com terceiros.
+              </p>
             </form>
-            )}
           </div>
         </div>
       )}
