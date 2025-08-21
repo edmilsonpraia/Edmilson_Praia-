@@ -219,7 +219,8 @@ const Portfolio: React.FC = () => {
         display: 'flex',
         alignItems: 'center',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        paddingTop: isMobile ? '90px' : '80px'
       }}>
         {/* Geometric Background */}
         <div style={{
@@ -235,39 +236,41 @@ const Portfolio: React.FC = () => {
         <div style={{
           maxWidth: '1400px',
           margin: '0 auto',
-          padding: isMobile ? '0 20px' : '0 40px',
+          padding: isMobile ? '40px 20px' : '0 40px',
           width: '100%',
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : '1fr 400px',
-          gap: isMobile ? '40px' : '80px',
-          alignItems: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: isMobile ? 'center' : 'flex-start',
           position: 'relative',
-          zIndex: 10
+          zIndex: 10,
+          textAlign: isMobile ? 'center' : 'left'
         }}>
-          <div>
+          <div style={{ width: '100%', maxWidth: isMobile ? '100%' : '700px' }}>
             <div style={{
               display: 'inline-block',
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              border: '1px solid rgba(59, 130, 246, 0.2)',
-              borderRadius: '100px',
-              padding: isMobile ? '6px 16px' : '8px 20px',
-              marginBottom: isMobile ? '24px' : '32px',
-              fontSize: isMobile ? '11px' : '13px',
-              fontWeight: '500',
+              backgroundColor: 'rgba(59, 130, 246, 0.15)',
+              border: '2px solid rgba(59, 130, 246, 0.4)',
+              borderRadius: '50px',
+              padding: isMobile ? '10px 20px' : '12px 24px',
+              marginBottom: isMobile ? '32px' : '40px',
+              fontSize: isMobile ? '12px' : '13px',
+              fontWeight: '600',
               color: '#60a5fa',
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase'
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              boxShadow: '0 4px 20px rgba(59, 130, 246, 0.2)',
+              backdropFilter: 'blur(10px)'
             }}>
-              Especialista em Geociências de Petróleo
+              {isMobile ? 'Especialista em Geociências' : 'Especialista em Geociências de Petróleo'}
             </div>
             
             <h1 style={{
-              fontSize: isMobile ? '32px' : '56px',
+              fontSize: isMobile ? '36px' : '56px',
               fontWeight: '700',
               color: 'white',
               lineHeight: '1.1',
               letterSpacing: '-0.02em',
-              marginBottom: isMobile ? '16px' : '24px'
+              marginBottom: isMobile ? '20px' : '24px'
             }}>
               Dr. Edmilson
               <br />
@@ -279,19 +282,20 @@ const Portfolio: React.FC = () => {
               color: '#cbd5e1',
               lineHeight: '1.7',
               marginBottom: isMobile ? '32px' : '40px',
-              maxWidth: '600px'
+              maxWidth: isMobile ? '100%' : '600px'
             }}>
-              Especialista em Geologia Aplicada ao Petróleo e Gás com doutorado em Geofísica Aplicada, combinando sólida
-              formação acadêmica com experiência prática em análise de dados e educação técnica.Analista de Dados na WellDesk,
-              com expertise comprovada em modelagem geológica, reservatórios e IA.
+              {isMobile 
+                ? 'Especialista em geologia aplicada e geofísica. Pioneiro em soluções de IA para análise de reservatórios de petróleo.'
+                : 'Especialista em geologia aplicada e geofísica com doutorado avançado em geofísica aplicada. Pioneiro em soluções baseadas em IA para análise de reservatórios de petróleo e interpretação de dados petrofísicos.'
+              }
             </p>
             
             <div style={{
               display: 'flex',
               flexDirection: isMobile ? 'column' : 'row',
-              flexWrap: 'wrap',
               gap: '16px',
-              marginBottom: isMobile ? '32px' : '48px'
+              marginBottom: isMobile ? '40px' : '48px',
+              width: '100%'
             }}>
               <button
                 onClick={() => scrollToSection('about')}
@@ -299,7 +303,7 @@ const Portfolio: React.FC = () => {
                   background: '#1e40af',
                   border: 'none',
                   color: 'white',
-                  padding: isMobile ? '14px 24px' : '16px 32px',
+                  padding: isMobile ? '16px 24px' : '16px 32px',
                   borderRadius: '8px',
                   fontSize: '14px',
                   fontWeight: '600',
@@ -307,17 +311,19 @@ const Portfolio: React.FC = () => {
                   transition: 'all 0.3s ease',
                   letterSpacing: '0.02em',
                   textTransform: 'uppercase',
-                  width: isMobile ? '100%' : 'auto'
+                  width: isMobile ? '100%' : 'auto',
+                  minHeight: '48px',
+                  boxShadow: '0 4px 15px rgba(30, 64, 175, 0.3)'
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.background = '#1d4ed8';
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(30, 64, 175, 0.5)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(30, 64, 175, 0.4)';
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.background = '#1e40af';
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(30, 64, 175, 0.3)';
                 }}
               >
                 Ver Perfil Completo
@@ -325,9 +331,9 @@ const Portfolio: React.FC = () => {
               
               <button style={{
                 background: 'transparent',
-                border: '2px solid rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
                 color: 'white',
-                padding: isMobile ? '12px 24px' : '14px 32px',
+                padding: isMobile ? '14px 24px' : '14px 32px',
                 borderRadius: '8px',
                 fontSize: '14px',
                 fontWeight: '600',
@@ -339,15 +345,19 @@ const Portfolio: React.FC = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                width: isMobile ? '100%' : 'auto'
+                width: isMobile ? '100%' : 'auto',
+                minHeight: '48px',
+                backdropFilter: 'blur(10px)'
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.borderColor = 'white';
                 e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
                 e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}>
                 <Download size={16} />
                 Baixar CV
@@ -357,34 +367,69 @@ const Portfolio: React.FC = () => {
             <div style={{
               display: 'flex',
               flexDirection: isMobile ? 'column' : 'row',
-              gap: isMobile ? '12px' : '32px',
-              fontSize: isMobile ? '13px' : '14px',
-              color: '#94a3b8'
+              gap: isMobile ? '16px' : '32px',
+              fontSize: isMobile ? '14px' : '14px',
+              color: '#94a3b8',
+              alignItems: isMobile ? 'center' : 'flex-start'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                padding: isMobile ? '8px 12px' : '0',
+                borderRadius: isMobile ? '6px' : '0',
+                backdropFilter: isMobile ? 'blur(10px)' : 'none'
+              }}>
                 <Mail size={16} />
-                <span style={{ wordBreak: 'break-all' }}>edmilsondelfimp45@gmail.com</span>
+                <span style={{ 
+                  wordBreak: isMobile ? 'break-all' : 'normal',
+                  fontSize: isMobile ? '12px' : '14px'
+                }}>
+                  {isMobile ? 'edmilsondelfimp45@gmail.com' : 'edmilsondelfimp45@gmail.com'}
+                </span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                padding: isMobile ? '8px 12px' : '0',
+                borderRadius: isMobile ? '6px' : '0',
+                backdropFilter: isMobile ? 'blur(10px)' : 'none'
+              }}>
                 <Phone size={16} />
                 +7 996 100 74 08
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                backgroundColor: isMobile ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                padding: isMobile ? '8px 12px' : '0',
+                borderRadius: isMobile ? '6px' : '0',
+                backdropFilter: isMobile ? 'blur(10px)' : 'none'
+              }}>
                 <MapPin size={16} />
-                Ufa, Rússia - Luanda, Angola
+                Ufa, Rússia
               </div>
             </div>
           </div>
           
-          {/* Professional Stats Card */}
+          {/* Professional Stats Card - Hidden on Mobile */}
           {!isMobile && (
             <div style={{
+              position: 'absolute',
+              top: '50%',
+              right: '40px',
+              transform: 'translateY(-50%)',
               backgroundColor: 'rgba(255, 255, 255, 0.08)',
               backdropFilter: 'blur(20px)',
               border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: '16px',
               padding: '40px',
-              color: 'white'
+              color: 'white',
+              width: '350px'
             }}>
               <h3 style={{
                 fontSize: '18px',
@@ -419,16 +464,18 @@ const Portfolio: React.FC = () => {
           )}
         </div>
         
-        <div style={{
-          position: 'absolute',
-          bottom: '40px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          animation: 'bounce 2s infinite',
-          zIndex: 10
-        }}>
-          <ChevronDown size={24} style={{ color: '#94a3b8' }} />
-        </div>
+        {!isMobile && (
+          <div style={{
+            position: 'absolute',
+            bottom: '40px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            animation: 'bounce 2s infinite',
+            zIndex: 10
+          }}>
+            <ChevronDown size={24} style={{ color: '#94a3b8' }} />
+          </div>
+        )}
       </section>
 
       {/* About Section */}
@@ -488,7 +535,7 @@ const Portfolio: React.FC = () => {
                     { label: 'Posição Atual', value: 'Fundador & Consultor Principal' },
                     { label: 'Especialização', value: 'Geofísica Aplicada' },
                     { label: 'Formação', value: 'Doutorado em Geofísica Aplicada' },
-                    { label: 'Localização', value: 'Ufa, Rússia - Luanda, Angola' }
+                    { label: 'Localização', value: 'Ufa, Rússia' }
                   ].map((item, index) => (
                     <div key={index} style={{
                       display: 'flex',
@@ -1558,7 +1605,7 @@ const Portfolio: React.FC = () => {
               {
                 icon: MapPin,
                 title: 'Localização',
-                primary: 'Ufa, Rússia - Luanda, Angola',
+                primary: 'Ufa, Rússia',
                 secondary: 'Consultoria internacional disponível',
                 color: '#f87171'
               }
