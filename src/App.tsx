@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Mail, Phone, MapPin, Award, BookOpen, User, Code, Globe, Star, Download, Calendar, Building, GraduationCap, FileText, Menu, X } from 'lucide-react';
+import { ChevronDown, Mail, Phone, MapPin, Award, BookOpen, Code, Globe, Star, Download, Calendar, Building, GraduationCap, FileText, Menu, X } from 'lucide-react';
 import './App.css';
 
 const Portfolio: React.FC = () => {
@@ -7,6 +7,15 @@ const Portfolio: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [expandedExp, setExpandedExp] = useState<Set<number>>(new Set());
+
+  const toggleExp = (i: number) => {
+    setExpandedExp(prev => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i); else next.add(i);
+      return next;
+    });
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1200);
@@ -563,243 +572,147 @@ const Portfolio: React.FC = () => {
 
       {/* About Section */}
       <section id="about" style={{
-        padding: isMobile ? '60px 20px' : '120px 40px',
+        padding: isMobile ? '60px 20px' : '100px 40px',
         backgroundColor: '#f8fafc'
       }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          {/* Section header */}
+          <div style={{ marginBottom: isMobile ? '32px' : '48px' }}>
+            <div style={{
+              display: 'inline-block',
+              backgroundColor: 'rgba(30,64,175,0.1)',
+              color: '#1e40af',
+              fontSize: '12px',
+              fontWeight: '700',
+              padding: '6px 14px',
+              borderRadius: '50px',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              marginBottom: '14px'
+            }}>About</div>
+            <h2 style={{
+              fontSize: isMobile ? '28px' : '36px',
+              fontWeight: '800',
+              color: '#0f172a',
+              letterSpacing: '-0.025em',
+              marginBottom: '14px',
+              lineHeight: '1.1'
+            }}>
+              Perfil Profissional
+            </h2>
+            <div style={{
+              width: '48px', height: '4px',
+              background: 'linear-gradient(90deg, #1e40af, #7c3aed)',
+              borderRadius: '2px'
+            }}></div>
+          </div>
+
+          {/* Compact bio + stats */}
+          <div style={{
+            background: 'white',
+            borderRadius: '20px',
+            padding: isMobile ? '24px' : '36px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+            border: '1px solid #e2e8f0',
+            marginBottom: isMobile ? '20px' : '24px'
+          }}>
+            <p style={{
+              fontSize: isMobile ? '15px' : '17px',
+              color: '#374151',
+              lineHeight: '1.7',
+              margin: 0
+            }}>
+              Geocientista-executivo angolano. <strong style={{ color: '#0f172a' }}>Director of R&D & Technology</strong> na COPIA Group of Companies, <strong style={{ color: '#0f172a' }}>Fundador</strong> da EDELPHIA (Lisboa) e da Justificações Acadêmicas. Doutoramento em Geofísica Aplicada, autor de 3 artigos COPIA Seis em 2026 e speaker em <strong style={{ color: '#1e40af' }}>10 fóruns continentais</strong> este ano.
+            </p>
+          </div>
+
+          {/* 4 compact stat cards */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : '400px 1fr',
-            gap: isMobile ? '40px' : '80px',
-            alignItems: 'start'
+            gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+            gap: isMobile ? '10px' : '16px',
+            marginBottom: isMobile ? '24px' : '32px'
           }}>
-            {/* Left Column - Professional Summary */}
-            <div>
-              <div style={{
-                backgroundColor: 'white',
-                borderRadius: '16px',
-                padding: isMobile ? '24px' : '40px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                marginBottom: '32px'
+            {[
+              { icon: Building, label: 'Posição', value: 'Director R&D · COPIA', color: '#7c3aed' },
+              { icon: GraduationCap, label: 'Formação', value: 'Doutoramento · Geofísica', color: '#1e40af' },
+              { icon: Globe, label: 'Base', value: 'Luanda · Lisboa · Ufa', color: '#059669' },
+              { icon: Award, label: 'Palcos 2026', value: '10 fóruns africanos', color: '#dc2626' }
+            ].map((stat, i) => (
+              <div key={i} style={{
+                background: 'white',
+                borderRadius: '14px',
+                padding: isMobile ? '14px' : '20px',
+                border: '1px solid #e2e8f0',
+                transition: 'all 0.3s ease',
+                cursor: 'default'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderColor = stat.color;
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = `0 12px 28px ${stat.color}20`;
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = '#e2e8f0';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
               }}>
+                <stat.icon size={isMobile ? 18 : 22} style={{ color: stat.color, marginBottom: '8px' }} />
                 <div style={{
-                  width: isMobile ? '60px' : '80px',
-                  height: isMobile ? '60px' : '80px',
-                  backgroundColor: '#1e40af',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '24px'
-                }}>
-                  <User size={isMobile ? 30 : 40} style={{ color: 'white' }} />
-                </div>
-                
-                <h3 style={{
-                  fontSize: isMobile ? '18px' : '20px',
-                  fontWeight: '600',
-                  color: '#0f172a',
-                  marginBottom: '16px'
-                }}>
-                  Resumo Profissional
-                </h3>
-                
-                <p style={{
-                  fontSize: '14px',
-                  color: '#64748b',
-                  lineHeight: '1.6',
-                  marginBottom: '24px'
-                }}>
-                  Geocientista de petróleo com expertise em modelagem de reservatórios baseada em IA e análise petrofísica.
-                </p>
-                
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {[
-                    { label: 'Posição Atual', value: 'Fundador & Consultor Principal' },
-                    { label: 'Especialização', value: 'Geofísica Aplicada' },
-                    { label: 'Formação', value: 'Doutorado em Geofísica Aplicada' },
-                    { label: 'Localização', value: 'Ufa, Rússia - Luanda, Angola' }
-                  ].map((item, index) => (
-                    <div key={index} style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      fontSize: isMobile ? '12px' : '13px'
-                    }}>
-                      <span style={{ color: '#94a3b8', fontWeight: '500' }}>{item.label}</span>
-                      <span style={{ color: '#0f172a', fontWeight: '600', textAlign: 'right', flex: 1, marginLeft: '8px' }}>{item.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Core Competencies */}
-              <div style={{
-                backgroundColor: 'white',
-                borderRadius: '16px',
-                padding: '32px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-              }}>
-                <h4 style={{
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  color: '#0f172a',
-                  marginBottom: '20px'
-                }}>
-                  Competências Principais
-                </h4>
-                
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {[
-                    'Machine Learning & IA',
-                    'Modelagem de Reservatórios',
-                    'Análise Petrofísica',
-                    'Interpretação de Dados',
-                    'Treinamento Acadêmico'
-                  ].map((skill, index) => (
-                    <div key={index} style={{
-                      padding: '8px 12px',
-                      backgroundColor: '#f1f5f9',
-                      borderRadius: '6px',
-                      fontSize: '13px',
-                      color: '#475569',
-                      fontWeight: '500'
-                    }}>
-                      {skill}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            
-            {/* Right Column - Detailed Profile */}
-            <div>
-              <div style={{ marginBottom: '48px' }}>
-                <h2 style={{
-                  fontSize: '32px',
+                  fontSize: '10px',
+                  fontWeight: '700',
+                  color: '#94a3b8',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  marginBottom: '4px'
+                }}>{stat.label}</div>
+                <div style={{
+                  fontSize: isMobile ? '13px' : '14px',
                   fontWeight: '700',
                   color: '#0f172a',
-                  marginBottom: '16px',
-                  letterSpacing: '-0.02em'
-                }}>
-                  Perfil Profissional
-                </h2>
-                <div style={{
-                  width: '40px',
-                  height: '4px',
-                  backgroundColor: '#1e40af',
-                  borderRadius: '2px',
-                  marginBottom: '32px'
-                }}></div>
+                  lineHeight: '1.3'
+                }}>{stat.value}</div>
               </div>
-              
-              <div style={{
-                backgroundColor: 'white',
-                borderRadius: '16px',
-                padding: '48px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                marginBottom: '32px'
-              }}>
-                <p style={{
-                  fontSize: '17px',
-                  color: '#374151',
-                  lineHeight: '1.8',
-                  marginBottom: '24px'
-                }}>
-                  <strong>Especialista em Geologia Aplicada ao Petróleo e Gás</strong> com doutorado em Geofísica Aplicada, 
-                  combinando sólida formação acadêmica com experiência prática em análise de dados e educação técnica.
-                </p>
-                
-                <p style={{
-                  fontSize: '17px',
-                  color: '#374151',
-                  lineHeight: '1.8',
-                  marginBottom: '24px'
-                }}>
-                  <strong>Fundador da Justificações Acadêmicas</strong> e Analista de Dados na WellDesk, com expertise comprovada 
-                  em modelagem geológica e de reservatórios, interpretação de perfis de poço e processamento de dados geofísicos.
-                </p>
-                
-                <p style={{
-                  fontSize: '17px',
-                  color: '#374151',
-                  lineHeight: '1.8'
-                }}>
-                  <strong>Desenvolvedor da plataforma Well Log Web Pro</strong>, especializada em análise, imputação e predição 
-                  de dados petrofísicos utilizando inteligência artificial, atendendo profissionais da Sonangol, Chevron e ANPG.
-                </p>
-              </div>
-              
-              {/* Key Achievements Grid */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '20px'
-              }}>
-                {[
-                  { 
-                    icon: Code, 
-                    title: 'Inovação em IA', 
-                    desc: 'Algoritmos avançados de ML para análise petrofísica',
-                    color: '#1e40af'
-                  },
-                  { 
-                    icon: Globe, 
-                    title: 'Alcance Global', 
-                    desc: 'Consultoria internacional em 4 países',
-                    color: '#059669'
-                  },
-                  { 
-                    icon: BookOpen, 
-                    title: 'Excelência Acadêmica', 
-                    desc: 'Doutorado em Geofísica Aplicada',
-                    color: '#7c3aed'
-                  },
-                  { 
-                    icon: Award, 
-                    title: 'Reconhecimento', 
-                    desc: 'Prêmios e honrarias internacionais',
-                    color: '#dc2626'
-                  }
-                ].map((achievement, index) => (
-                  <div key={index} style={{
-                    backgroundColor: 'white',
-                    borderRadius: '12px',
-                    padding: '24px',
-                    textAlign: 'center',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-                    transition: 'all 0.3s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
-                  }}>
-                    <achievement.icon size={28} style={{ color: achievement.color, marginBottom: '12px' }} />
-                    <h4 style={{
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      color: '#0f172a',
-                      marginBottom: '8px',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em'
-                    }}>
-                      {achievement.title}
-                    </h4>
-                    <p style={{
-                      fontSize: '12px',
-                      color: '#64748b',
-                      lineHeight: '1.5'
-                    }}>
-                      {achievement.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
+            ))}
+          </div>
+
+          {/* Competencies chips */}
+          <div style={{
+            background: 'white',
+            borderRadius: '16px',
+            padding: isMobile ? '20px' : '24px',
+            border: '1px solid #e2e8f0'
+          }}>
+            <div style={{
+              fontSize: '11px',
+              fontWeight: '700',
+              color: '#94a3b8',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              marginBottom: '14px'
+            }}>Competências Principais</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {[
+                { label: 'Machine Learning & IA', c: '#7c3aed' },
+                { label: 'Interpretação Sísmica', c: '#1e40af' },
+                { label: 'Modelagem de Reservatórios', c: '#059669' },
+                { label: 'Análise Petrofísica', c: '#dc2626' },
+                { label: 'Python', c: '#eab308' },
+                { label: 'Petrel · ECLIPSE', c: '#0ea5e9' },
+                { label: 'Inferência Causal', c: '#ec4899' },
+                { label: 'Formação Profissional', c: '#f97316' }
+              ].map((sk, i) => (
+                <span key={i} style={{
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  color: sk.c,
+                  background: `${sk.c}12`,
+                  border: `1px solid ${sk.c}25`,
+                  padding: '6px 12px',
+                  borderRadius: '50px',
+                  letterSpacing: '0.02em'
+                }}>{sk.label}</span>
+              ))}
             </div>
           </div>
         </div>
@@ -844,12 +757,14 @@ const Portfolio: React.FC = () => {
           }}>
             {[
               {
-                title: 'Director of Research, Development & Technology',
+                title: 'Director of R&D & Technology',
                 company: 'COPIA Group of Companies',
                 period: 'Atual',
                 type: 'Executivo · I&D',
                 icon: Building,
                 color: '#7c3aed',
+                tagline: 'Lidero I&D e desenvolvimento de 3 produtos COPIA — Seis, DynamicSim e Quasar.',
+                chips: ['IA', 'Geociências', 'ASGA', 'Expansão Namíbia'],
                 achievements: [
                   'Lidero a agenda de I&D em geociências aplicadas, IA e transformação digital industrial em uma das maiores empresas angolanas de engenharia',
                   'Responsável pelo desenvolvimento dos produtos proprietários COPIA Seis (interpretação sísmica com IA), COPIA DynamicSim (modelagem dinâmica de reservatórios) e COPIA Quasar (análise de infraestruturas críticas)',
@@ -864,6 +779,8 @@ const Portfolio: React.FC = () => {
                 type: 'Founder',
                 icon: Star,
                 color: '#0ea5e9',
+                tagline: 'Data science e algoritmos — Φ = ∫ knowledge · dt.',
+                chips: ['Lisboa', 'ML', 'Inferência causal', 'Fundador'],
                 achievements: [
                   'Fundei a EDELPHIA — empresa de data science e algoritmos sob a assinatura "Science · Algorithms · Intelligence"',
                   'Framework baseado em quatro pilares: precisão em estimação estatística, minimização de risco em machine learning, análise de inferência causal e acumulação contínua de conhecimento',
@@ -872,12 +789,14 @@ const Portfolio: React.FC = () => {
                 ]
               },
               {
-                title: 'Formador e Consultor Técnico Sénior',
+                title: 'Formador & Consultor Técnico Sénior',
                 company: 'Justificações Acadêmicas',
-                period: '2020 - Presente',
+                period: '2020 — Presente',
                 type: 'Fundador & CEO',
                 icon: BookOpen,
                 color: '#1e40af',
+                tagline: 'Formação profissional sénior para quadros Sonangol, Chevron, ANPG.',
+                chips: ['Petróleo', 'Python', 'BR · LY · MZ', '5 anos'],
                 achievements: [
                   'Fundei e lidero programas especializados de formação profissional em geociências, engenharia de petróleo e programação Python',
                   'Atendo profissionais de grandes empresas petrolíferas incluindo Sonangol, Chevron e ANPG com soluções de treinamento personalizadas',
@@ -886,12 +805,14 @@ const Portfolio: React.FC = () => {
                 ]
               },
               {
-                title: 'Analista de Dados',
+                title: 'Analista de Dados · Líder Técnico',
                 company: 'WellDesk',
                 period: 'Atual',
                 type: 'Líder Técnico',
                 icon: Code,
                 color: '#059669',
+                tagline: 'Soluções de ML para análise petrofísica e modelagem geológica.',
+                chips: ['Well Log Web Pro', 'Petrel', 'ECLIPSE', 'Python'],
                 achievements: [
                   'Desenvolvo soluções avançadas de Machine Learning para análise de dados petrofísicos e geofísicos',
                   'Criei a plataforma Well Log Web Pro, integrando IA com visualização interativa para suporte à decisão',
@@ -899,26 +820,28 @@ const Portfolio: React.FC = () => {
                   'Lidero iniciativas de análise, imputação e predição de dados para otimização de reservatórios de petróleo'
                 ]
               }
-            ].map((experience, index) => (
+            ].map((experience, index) => {
+              const isExpanded = expandedExp.has(index);
+              return (
               <div key={index} className="experience-card" style={{
                 backgroundColor: '#f8fafc',
                 border: '1px solid #e2e8f0',
                 borderRadius: '16px',
-                padding: '40px',
+                padding: isMobile ? '22px 20px' : '28px',
                 transition: 'border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
                 height: 'fit-content',
                 opacity: 0,
                 transform: 'translateY(32px)',
                 animation: 'fadeInUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards',
-                animationDelay: `${index * 0.15}s`,
+                animationDelay: `${index * 0.12}s`,
                 position: 'relative',
                 overflow: 'hidden'
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.borderColor = experience.color;
                 e.currentTarget.style.backgroundColor = 'white';
-                e.currentTarget.style.transform = 'translateY(-8px)';
-                e.currentTarget.style.boxShadow = `0 20px 40px ${experience.color}25`;
+                e.currentTarget.style.transform = 'translateY(-6px)';
+                e.currentTarget.style.boxShadow = `0 18px 40px ${experience.color}22`;
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.borderColor = '#e2e8f0';
@@ -926,98 +849,152 @@ const Portfolio: React.FC = () => {
                 e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = 'none';
               }}>
-                {/* Subtle animated accent corner */}
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  width: '140px',
-                  height: '140px',
-                  background: `radial-gradient(circle at top right, ${experience.color}25 0%, transparent 70%)`,
-                  pointerEvents: 'none',
-                  transition: 'opacity 0.4s ease'
-                }}></div>
                 {/* Left accent stripe */}
                 <div style={{
                   position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: '4px',
+                  left: 0, top: 0, bottom: 0,
+                  width: '3px',
                   background: `linear-gradient(180deg, ${experience.color} 0%, ${experience.color}40 100%)`,
                   borderTopLeftRadius: '16px',
                   borderBottomLeftRadius: '16px'
                 }}></div>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '24px', position: 'relative', zIndex: 2 }}>
+
+                {/* Header */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px', position: 'relative', zIndex: 2 }}>
                   <div className="exp-icon-wrap" style={{
-                    width: '52px',
-                    height: '52px',
+                    width: '44px',
+                    height: '44px',
                     background: `linear-gradient(135deg, ${experience.color} 0%, ${experience.color}cc 100%)`,
-                    borderRadius: '14px',
+                    borderRadius: '12px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginRight: '16px',
-                    boxShadow: `0 8px 20px ${experience.color}40`,
-                    transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                    boxShadow: `0 6px 16px ${experience.color}35`,
+                    transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                    flexShrink: 0
                   }}>
-                    <experience.icon size={26} style={{ color: 'white' }} />
+                    <experience.icon size={22} style={{ color: 'white' }} />
                   </div>
-                  <div>
+                  <div style={{ minWidth: 0 }}>
                     <div style={{
-                      fontSize: '12px',
-                      fontWeight: '600',
+                      fontSize: '10px',
+                      fontWeight: '700',
                       color: experience.color,
                       textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      marginBottom: '4px'
+                      letterSpacing: '0.08em',
+                      marginBottom: '3px'
                     }}>
                       {experience.type}
                     </div>
                     <h3 style={{
-                      fontSize: '18px',
+                      fontSize: isMobile ? '15px' : '17px',
                       fontWeight: '700',
                       color: '#0f172a',
-                      marginBottom: '4px'
+                      marginBottom: '2px',
+                      lineHeight: '1.25'
                     }}>
                       {experience.title}
                     </h3>
                     <div style={{
-                      fontSize: '14px',
+                      fontSize: '12px',
                       color: '#64748b',
                       fontWeight: '500'
                     }}>
-                      {experience.company} • {experience.period}
+                      {experience.company} · {experience.period}
                     </div>
                   </div>
                 </div>
-                
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {experience.achievements.map((achievement, i) => (
-                    <div key={i} style={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '12px'
-                    }}>
-                      <div style={{
-                        width: '6px',
-                        height: '6px',
-                        backgroundColor: experience.color,
-                        borderRadius: '50%',
-                        marginTop: '8px',
-                        flexShrink: 0
-                      }}></div>
-                      <p style={{
-                        fontSize: '14px',
-                        color: '#374151',
-                        lineHeight: '1.6',
-                        margin: 0
-                      }}>
-                        {achievement}
-                      </p>
-                    </div>
+
+                {/* Tagline */}
+                <p style={{
+                  fontSize: '14px',
+                  color: '#374151',
+                  lineHeight: '1.55',
+                  margin: '0 0 14px 0',
+                  fontWeight: '500'
+                }}>
+                  {experience.tagline}
+                </p>
+
+                {/* Chips */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>
+                  {experience.chips.map((chip, ci) => (
+                    <span key={ci} style={{
+                      fontSize: '11px',
+                      fontWeight: '600',
+                      color: experience.color,
+                      background: `${experience.color}12`,
+                      border: `1px solid ${experience.color}25`,
+                      padding: '4px 10px',
+                      borderRadius: '50px',
+                      letterSpacing: '0.02em'
+                    }}>{chip}</span>
                   ))}
                 </div>
+
+                {/* Expandable achievements */}
+                <div style={{
+                  maxHeight: isExpanded ? '600px' : '0',
+                  overflow: 'hidden',
+                  transition: 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease',
+                  opacity: isExpanded ? 1 : 0
+                }}>
+                  <div style={{
+                    display: 'flex', flexDirection: 'column', gap: '10px',
+                    paddingTop: '8px',
+                    paddingBottom: '4px',
+                    borderTop: `1px solid ${experience.color}20`,
+                    marginTop: '4px'
+                  }}>
+                    {experience.achievements.map((achievement, i) => (
+                      <div key={i} style={{
+                        display: 'flex', alignItems: 'flex-start', gap: '10px',
+                        paddingTop: i === 0 ? '12px' : '0'
+                      }}>
+                        <div style={{
+                          width: '5px', height: '5px',
+                          backgroundColor: experience.color,
+                          borderRadius: '50%', marginTop: '7px', flexShrink: 0
+                        }}></div>
+                        <p style={{
+                          fontSize: '13px',
+                          color: '#4b5563',
+                          lineHeight: '1.55',
+                          margin: 0
+                        }}>{achievement}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Toggle button */}
+                <button
+                  onClick={() => toggleExp(index)}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    background: 'none',
+                    border: 'none',
+                    padding: '6px 0',
+                    marginTop: '4px',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: experience.color,
+                    cursor: 'pointer',
+                    letterSpacing: '0.03em',
+                    textTransform: 'uppercase',
+                    transition: 'opacity 0.2s ease'
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
+                  onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
+                >
+                  {isExpanded ? 'Ver menos' : 'Ver detalhes'}
+                  <ChevronDown size={14} style={{
+                    transition: 'transform 0.3s ease',
+                    transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'
+                  }} />
+                </button>
 
                 {(experience.company === 'EDELPHIA' || experience.company === 'Justificações Acadêmicas') && (
                   <a
@@ -1057,7 +1034,8 @@ const Portfolio: React.FC = () => {
                   </a>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
