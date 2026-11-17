@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Mail, Phone, MapPin, Award, BookOpen, Code, Globe, Star, Download, Calendar, Building, GraduationCap, FileText, Menu, X } from 'lucide-react';
+import { ChevronDown, Mail, Phone, MapPin, Award, BookOpen, Code, Globe, Star, Download, Calendar, Building, GraduationCap, FileText, Menu, X, MessageCircle, Send, User, Home, Briefcase, Mic, Camera, Sparkles } from 'lucide-react';
 import './App.css';
 
 const Portfolio: React.FC = () => {
@@ -9,6 +9,46 @@ const Portfolio: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [expandedExp, setExpandedExp] = useState<Set<number>>(new Set());
 
+  // === AI Chat Assistant state ===
+  type Lang = 'pt' | 'en';
+  type ChatMsg = { role: 'user' | 'bot'; text: string; suggests?: string[]; cta?: boolean };
+  const [siteLang, setSiteLang] = useState<Lang>('pt');
+
+  // Bilingual helper — pass PT + EN strings inline
+  const t = (pt: string, en: string): string => siteLang === 'pt' ? pt : en;
+  const [chatOpen, setChatOpen] = useState<boolean>(false);
+  const [chatInput, setChatInput] = useState<string>('');
+  const [chatTyping, setChatTyping] = useState<boolean>(false);
+
+  const UI = {
+    pt: {
+      title: 'Assistente IA',
+      subtitle: 'Treinado sobre Edmilson Praia',
+      placeholder: 'Pergunta algo sobre o Edmilson…',
+      greet: 'Olá! 👋 Sou o assistente IA do Edmilson Praia. Pergunta-me qualquer coisa sobre o seu percurso, empresas, produtos COPIA, eventos de 2026, formação ou publicações. Também posso ajudar a agendar uma consultoria.',
+      greetSuggests: ['Quem é o Edmilson?', 'Que produtos lidera?', 'Palestras em 2026?', 'Agendar consultoria'],
+      fallback: 'Hmm, não encontrei resposta directa. Posso falar sobre: experiência, COPIA, EDELPHIA, Justificações, WellDesk, formação, 10 eventos 2026, 3 artigos COPIA Seis, ou contactos. Também posso encaminhar-te directamente para o WhatsApp do Edmilson.',
+      fallbackSuggests: ['Agendar consultoria', 'Quem é o Edmilson?', 'Palestras em 2026?'],
+      waCta: 'Falar via WhatsApp',
+      waMsg: 'Olá Edmilson, cheguei através do teu site e gostaria de falar contigo.'
+    },
+    en: {
+      title: 'AI Assistant',
+      subtitle: 'Trained on Edmilson Praia',
+      placeholder: 'Ask anything about Edmilson…',
+      greet: 'Hi! 👋 I\'m Edmilson Praia\'s AI assistant. Ask me anything about his career, companies, COPIA products, 2026 events, education or publications. I can also help you book a consultation.',
+      greetSuggests: ['Who is Edmilson?', 'What products does he lead?', '2026 talks?', 'Book consultation'],
+      fallback: 'Hmm, I didn\'t find a direct answer. I can talk about: experience, COPIA, EDELPHIA, Justificações, WellDesk, education, 10 events in 2026, 3 COPIA Seis papers, or contacts. I can also redirect you directly to Edmilson\'s WhatsApp.',
+      fallbackSuggests: ['Book consultation', 'Who is Edmilson?', '2026 talks?'],
+      waCta: 'Talk via WhatsApp',
+      waMsg: 'Hi Edmilson, I found you through your site and would like to talk.'
+    }
+  } as const;
+
+  const [chatMessages, setChatMessages] = useState<ChatMsg[]>([
+    { role: 'bot', text: UI.pt.greet, suggests: [...UI.pt.greetSuggests] }
+  ]);
+
   const toggleExp = (i: number) => {
     setExpandedExp(prev => {
       const next = new Set(prev);
@@ -16,6 +56,377 @@ const Portfolio: React.FC = () => {
       return next;
     });
   };
+
+  // === Knowledge Base ===
+  type KBEntry = {
+    id: string;
+    keywords: string[];
+    pt: { answer: string; suggests?: string[] };
+    en: { answer: string; suggests?: string[] };
+    cta?: boolean;
+  };
+  const KBx: KBEntry[] = [
+    {
+      id: 'consultation',
+      keywords: ['consultoria', 'agendar', 'marcar', 'reunião', 'reuniao', 'falar', 'contactar', 'contratar', 'consultation', 'book', 'meeting', 'talk', 'schedule', 'appointment', 'hire'],
+      pt: {
+        answer: 'Com todo o prazer posso ajudar a marcar uma consultoria com o Edmilson. Para ele preparar-se, responde-me:\n\n1️⃣ Qual é a tua área de interesse? (interpretação sísmica, modelagem de reservatórios, formação, IA em O&G, outro)\n2️⃣ A consultoria é para empresa ou individual?\n3️⃣ Qual o teu prazo? (urgente, até 30 dias, flexível)\n\nPodes responder aqui ou clicar no botão abaixo para falar directamente com o Edmilson via WhatsApp.',
+        suggests: ['Interpretação sísmica', 'Modelagem de reservatórios', 'Formação profissional', 'IA em O&G']
+      },
+      en: {
+        answer: 'Happy to help you book a consultation with Edmilson. To help him prepare, please tell me:\n\n1️⃣ What is your area of interest? (seismic interpretation, reservoir modeling, training, AI in O&G, other)\n2️⃣ Is it for a company or individual?\n3️⃣ What is your timeline? (urgent, within 30 days, flexible)\n\nYou can answer here or tap the button below to talk to Edmilson directly on WhatsApp.',
+        suggests: ['Seismic interpretation', 'Reservoir modeling', 'Professional training', 'AI in O&G']
+      },
+      cta: true
+    },
+    {
+      id: 'identity',
+      keywords: ['quem', 'edmilson', 'praia', 'sobre', 'bio', 'biografia', 'apresenta', 'resumo', 'perfil', 'who', 'about', 'profile'],
+      pt: {
+        answer: 'Edmilson Delfim Praia é geocientista-executivo angolano com Doutoramento em Geofísica Aplicada (Ufa, Rússia). Atualmente é Director of Research, Development & Technology na COPIA Group of Companies, Fundador da EDELPHIA (Lisboa) e da Justificações Acadêmicas, e Líder Técnico (Analista de Dados) na WellDesk.',
+        suggests: ['Que produtos lidera?', 'O que é EDELPHIA?', 'Palestras em 2026?']
+      },
+      en: {
+        answer: 'Edmilson Delfim Praia is an Angolan geoscientist-executive with a PhD in Applied Geophysics (Ufa, Russia). He is currently Director of Research, Development & Technology at COPIA Group of Companies, Founder of EDELPHIA (Lisbon) and Justificações Acadêmicas, and Technical Lead (Data Analyst) at WellDesk.',
+        suggests: ['What products does he lead?', 'What is EDELPHIA?', '2026 talks?']
+      }
+    },
+    {
+      id: 'copia',
+      keywords: ['copia', 'group', 'director', 'cargo', 'empresa', 'trabalha', 'posição', 'atual', 'position', 'role', 'current'],
+      pt: {
+        answer: 'Na COPIA Group of Companies é Director of Research, Development & Technology. Lidera a agenda de I&D em geociências aplicadas, IA e transformação digital. Responsável pelo desenvolvimento de 3 produtos COPIA (Seis, DynamicSim, Quasar). Signatário do protocolo com a ASGA (Set 2025). Apoia a expansão para a Namíbia.',
+        suggests: ['Que produtos COPIA?', 'O que é o Quasar?']
+      },
+      en: {
+        answer: 'At COPIA Group of Companies he is Director of Research, Development & Technology. He leads the R&D agenda in applied geosciences, AI and digital transformation. Responsible for the development of 3 COPIA products (Seis, DynamicSim, Quasar). Signatory of the ASGA protocol (Sep 2025). Supports expansion to Namibia.',
+        suggests: ['Which COPIA products?', 'What is Quasar?']
+      }
+    },
+    {
+      id: 'copia-products',
+      keywords: ['produtos', 'software', 'seis', 'dynamicsim', 'quasar', 'desenvolve', 'desenvolvimento', 'tecnologia', 'products', 'tech', 'develops'],
+      pt: {
+        answer: 'Edmilson lidera 3 produtos COPIA: (1) COPIA Seis — plataforma de interpretação sísmica com IA (Geobody Probe, Seismic Horizons, ML). (2) COPIA DynamicSim — modelagem dinâmica de reservatórios, em português e paga em kwanzas. (3) COPIA Quasar — análise de infraestruturas críticas, apresentado publicamente no MINEA 2026.',
+        suggests: ['Fala sobre COPIA Seis', 'Fala sobre Quasar', 'Agendar consultoria']
+      },
+      en: {
+        answer: 'Edmilson leads 3 COPIA products: (1) COPIA Seis — AI-powered seismic interpretation platform (Geobody Probe, Seismic Horizons, ML). (2) COPIA DynamicSim — dynamic reservoir modeling, in Portuguese and paid in kwanzas. (3) COPIA Quasar — critical infrastructure analysis, publicly launched at MINEA 2026.',
+        suggests: ['Tell me about COPIA Seis', 'Tell me about Quasar', 'Book consultation']
+      }
+    },
+    {
+      id: 'copia-seis',
+      keywords: ['seis', 'interpretação', 'interpretation', 'sísmica', 'seismic', 'geobody'],
+      pt: {
+        answer: 'COPIA Seis é uma plataforma proprietária de interpretação sísmica assistida por IA. Inclui Geobody Probe, Seismic Horizons e Machine Learning. Desenvolvida sob a liderança directa do Edmilson, com artigos de research publicados em 2026.',
+        suggests: ['Que artigos sobre Seis?', 'Agendar consultoria']
+      },
+      en: {
+        answer: 'COPIA Seis is a proprietary AI-assisted seismic interpretation platform. Includes Geobody Probe, Seismic Horizons and Machine Learning. Developed under Edmilson\'s direct leadership, with research articles published in 2026.',
+        suggests: ['Any papers on Seis?', 'Book consultation']
+      }
+    },
+    {
+      id: 'copia-dynamicsim',
+      keywords: ['dynamicsim', 'simulação', 'simulation', 'reservatório', 'reservatórios', 'reservoir', 'modelagem', 'modeling'],
+      pt: {
+        answer: 'COPIA DynamicSim é um simulador dinâmico de reservatórios 100% nacional. Interface em português, pagamento em kwanzas — alternativa competitiva aos softwares internacionais. Demonstrado publicamente no AGLNG 2026 em Maputo com análise PVT Peng-Robinson, declínio Arps e previsão LSTM.',
+        suggests: ['Fala sobre AGLNG', 'Agendar consultoria']
+      },
+      en: {
+        answer: 'COPIA DynamicSim is a 100% national dynamic reservoir simulator. Portuguese interface, payment in kwanzas — competitive alternative to international software. Publicly demonstrated at AGLNG 2026 in Maputo with Peng-Robinson PVT analysis, Arps decline and LSTM forecasting.',
+        suggests: ['Tell me about AGLNG', 'Book consultation']
+      }
+    },
+    {
+      id: 'copia-quasar',
+      keywords: ['quasar', 'infraestrutura', 'infrastructure', 'infraestruturas', 'críticas', 'critical', 'minea', 'soberania'],
+      pt: {
+        answer: 'COPIA Quasar é software para análise de infraestruturas críticas nacionais. Foi apresentado publicamente por Edmilson no MINEA 2026 (Luanda, 28-29 Mai) na palestra "Soberania Tecnológica na Análise de Infraestruturas Críticas Utilizando Software QUASAR", organizada pelo Ministério da Energia e Águas de Angola.',
+        suggests: ['Fala sobre o MINEA 2026']
+      },
+      en: {
+        answer: 'COPIA Quasar is software for national critical infrastructure analysis. Publicly launched by Edmilson at MINEA 2026 (Luanda, May 28-29) in the talk "Technological Sovereignty in Critical Infrastructure Analysis Using QUASAR Software", organized by Angola\'s Ministry of Energy and Water.',
+        suggests: ['Tell me about MINEA 2026']
+      }
+    },
+    {
+      id: 'edelphia',
+      keywords: ['edelphia', 'lisboa', 'portugal', 'lisbon', 'data science', 'algoritmo', 'algoritmos', 'algorithms', 'knowledge', 'phi'],
+      pt: {
+        answer: 'EDELPHIA é a empresa fundada pelo Edmilson em Lisboa, Portugal. Assinatura: "Science · Algorithms · Intelligence". Framework em 4 pilares: estimação estatística, minimização de risco em ML, inferência causal e acumulação contínua de conhecimento. Equação central: Φ = ∫ knowledge · dt. Site oficial: edelphia.vercel.app',
+        suggests: ['Que outras empresas?']
+      },
+      en: {
+        answer: 'EDELPHIA is the company Edmilson founded in Lisbon, Portugal. Signature: "Science · Algorithms · Intelligence". Framework in 4 pillars: statistical estimation, ML risk minimization, causal inference and continuous knowledge accumulation. Core equation: Φ = ∫ knowledge · dt. Official site: edelphia.vercel.app',
+        suggests: ['What other companies?']
+      }
+    },
+    {
+      id: 'justificacoes',
+      keywords: ['justificações', 'justificacoes', 'acadêmicas', 'academicas', 'formação', 'formacao', 'training', 'treinamento', 'sonangol', 'chevron', 'anpg', 'profissionais', 'professionals'],
+      pt: {
+        answer: 'Justificações Acadêmicas é a empresa fundada pelo Edmilson em 2020, especializada em formação profissional sénior. Atende profissionais de grandes empresas petrolíferas: Sonangol, Chevron, ANPG. Ministra formação avançada a quadros técnicos sénior (UAN, UCAN, ISPTEC) — foco em profissionais, não estudantes. Consultoria internacional para Brasil, Líbia e Moçambique. Site: justificacoesacademicas.org',
+        suggests: ['Agendar formação']
+      },
+      en: {
+        answer: 'Justificações Acadêmicas is the company Edmilson founded in 2020, specialized in senior professional training. Serves professionals from major oil companies: Sonangol, Chevron, ANPG. Delivers advanced training to senior technical staff (UAN, UCAN, ISPTEC) — focused on professionals, not students. International consulting for Brazil, Libya and Mozambique. Site: justificacoesacademicas.org',
+        suggests: ['Book training']
+      }
+    },
+    {
+      id: 'welldesk',
+      keywords: ['welldesk', 'well log', 'web pro', 'analista', 'analyst', 'dados', 'data', 'petrofísico', 'petrofísica', 'petrophysics'],
+      pt: {
+        answer: 'Na WellDesk, Edmilson é Analista de Dados e Líder Técnico. Desenvolveu a plataforma Well Log Web Pro, integrando IA com visualização interativa para análise, imputação e predição de dados petrofísicos. Usa Python, Petrel e ECLIPSE em projetos de modelagem geológica.',
+        suggests: ['Como funciona o Well Log Web Pro?']
+      },
+      en: {
+        answer: 'At WellDesk, Edmilson is Data Analyst and Technical Lead. Developed the Well Log Web Pro platform, integrating AI with interactive visualization for analysis, imputation and prediction of petrophysical data. Uses Python, Petrel and ECLIPSE in geological modeling projects.',
+        suggests: ['How does Well Log Web Pro work?']
+      }
+    },
+    {
+      id: 'education',
+      keywords: ['formação', 'education', 'doutoramento', 'phd', 'estudo', 'estudou', 'studied', 'university', 'universidade', 'ufa', 'rússia', 'russia', 'geofísica', 'geophysics'],
+      pt: {
+        answer: 'Edmilson possui Doutoramento em Geofísica Aplicada pela Universidade de Petróleo da Rússia (Ufa). Especialista em geologia aplicada ao petróleo e gás, com forte base em ciência de dados e IA.',
+        suggests: ['Que línguas fala?']
+      },
+      en: {
+        answer: 'Edmilson holds a PhD in Applied Geophysics from the Russian University of Petroleum (Ufa). Specialist in applied geology for oil and gas, with strong foundation in data science and AI.',
+        suggests: ['What languages?']
+      }
+    },
+    {
+      id: 'languages',
+      keywords: ['línguas', 'linguas', 'idiomas', 'languages', 'fala', 'speaks', 'português', 'portuguese', 'inglês', 'english', 'russo', 'russian'],
+      pt: { answer: 'Edmilson fala 3 línguas: Português (nativo), Inglês (fluente — speaker em conferências como AEW, AGLNG, NIEC) e Russo (nível avançado — formou-se na Rússia).', suggests: ['Onde estudou?'] },
+      en: { answer: 'Edmilson speaks 3 languages: Portuguese (native), English (fluent — speaker at conferences like AEW, AGLNG, NIEC) and Russian (advanced — he studied in Russia).', suggests: ['Where did he study?'] }
+    },
+    {
+      id: 'events',
+      keywords: ['eventos', 'events', 'palcos', 'conferências', 'conferences', 'palestras', 'talks', 'speaker', '2026', 'fóruns', 'forums'],
+      pt: {
+        answer: 'Em 2026, Edmilson foi speaker em 10 palcos continentais africanos: NIEC (Namíbia, Abr), MINEA (Luanda, Mai), AIMCT (Luanda, Jul), NOGC (Namíbia, Ago), Capital Humano (Luanda, Ago), AOG (Luanda, Set), AHTLS (Talatona, Set), AEW (Cape Town, Out), Huawei Masterclass (Luanda), AGLNG (Maputo, Nov).',
+        suggests: ['Fala sobre AGLNG', 'Fala sobre AOG', 'Fala sobre AEW']
+      },
+      en: {
+        answer: 'In 2026, Edmilson spoke at 10 African continental stages: NIEC (Namibia, Apr), MINEA (Luanda, May), AIMCT (Luanda, Jul), NOGC (Namibia, Aug), Capital Humano (Luanda, Aug), AOG (Luanda, Sep), AHTLS (Talatona, Sep), AEW (Cape Town, Oct), Huawei Masterclass (Luanda), AGLNG (Maputo, Nov).',
+        suggests: ['Tell me about AGLNG', 'Tell me about AOG', 'Tell me about AEW']
+      }
+    },
+    {
+      id: 'aglng',
+      keywords: ['aglng', 'maputo', 'moçambique', 'mocambique', 'mozambique', 'lng', 'gas', 'chapo'],
+      pt: {
+        answer: 'AGLNG 2026 — Africa Gas & LNG Summit (Maputo, 11-13 Nov). Edmilson representou a COPIA na Session 3.1 "Preparing Africa\'s Workforce for Gas and LNG Projects". Demonstração técnica do COPIA DynamicSim. Patrocínio de H.E. Daniel Chapo, Presidente de Moçambique, com ENH, INP, Sasol, ExxonMobil, TotalEnergies.',
+        suggests: ['Que outros eventos?']
+      },
+      en: {
+        answer: 'AGLNG 2026 — Africa Gas & LNG Summit (Maputo, Nov 11-13). Edmilson represented COPIA in Session 3.1 "Preparing Africa\'s Workforce for Gas and LNG Projects". Technical demo of COPIA DynamicSim. Sponsored by H.E. Daniel Chapo, President of Mozambique, with ENH, INP, Sasol, ExxonMobil, TotalEnergies.',
+        suggests: ['Other events?']
+      }
+    },
+    {
+      id: 'aog',
+      keywords: ['aog', 'luanda', 'angola oil', 'oil gas', 'painel', 'panel', 'breakfast', 'vip'],
+      pt: {
+        answer: 'AOG 2026 — Angola Oil & Gas (Luanda, 8-10 Set). Edmilson teve 3 participações: (1) painel no palco principal com executivos seniores; (2) keynote técnico pre-conferência "Reconstruction of Missing RHOB and NPHI Well Logs Using Machine Learning" powered by COPIA; (3) VIP Breakfast onde discursou sobre os softwares COPIA ao lado do Secretário de Estado angolano.',
+        suggests: ['Que outros eventos em Angola?']
+      },
+      en: {
+        answer: 'AOG 2026 — Angola Oil & Gas (Luanda, Sep 8-10). Edmilson had 3 participations: (1) panel on main stage with senior executives; (2) pre-conference technical keynote "Reconstruction of Missing RHOB and NPHI Well Logs Using Machine Learning" powered by COPIA; (3) VIP Breakfast where he spoke about COPIA software alongside the Angolan Secretary of State.',
+        suggests: ['Other events in Angola?']
+      }
+    },
+    {
+      id: 'aew',
+      keywords: ['aew', 'cape town', 'african energy', 'subsurface'],
+      pt: {
+        answer: 'AEW 2026 — African Energy Week (Cape Town, 12 Out). Edmilson como Speaker + Chairperson: (1) palestra oficial "Building Africa\'s Subsurface Intelligence Through AI-Driven Seismic Interpretation" (Sala 2.4B, 10:00); (2) chair no Exhibition Hall Tech Stage da COPIA Group.',
+        suggests: ['Fala sobre AGLNG']
+      },
+      en: {
+        answer: 'AEW 2026 — African Energy Week (Cape Town, Oct 12). Edmilson as Speaker + Chairperson: (1) official talk "Building Africa\'s Subsurface Intelligence Through AI-Driven Seismic Interpretation" (Room 2.4B, 10:00); (2) chair at the COPIA Group Exhibition Hall Tech Stage.',
+        suggests: ['Tell me about AGLNG']
+      }
+    },
+    {
+      id: 'niec',
+      keywords: ['niec', 'namíbia', 'namibia', 'windhoek', 'reservoir engineering'],
+      pt: {
+        answer: 'NIEC 2026 — Namibia International Energy Conference (Windhoek, 14 Abr, Venue 3, 15:15). Palestra "Digital Transformation in Reservoir Engineering: Using AI for Integrated Seismic Interpretation and Dynamic Simulation" representando COPIA perante autoridades namibianas.',
+        suggests: ['Fala sobre NOGC']
+      },
+      en: {
+        answer: 'NIEC 2026 — Namibia International Energy Conference (Windhoek, Apr 14, Venue 3, 15:15). Talk "Digital Transformation in Reservoir Engineering: Using AI for Integrated Seismic Interpretation and Dynamic Simulation" representing COPIA before Namibian authorities.',
+        suggests: ['Tell me about NOGC']
+      }
+    },
+    {
+      id: 'minea',
+      keywords: ['minea', 'águas', 'aguas', 'water', 'ministério', 'ministerio', 'soberania'],
+      pt: {
+        answer: 'MINEA 2026 — 2ª Conferência Internacional sobre Energia e Águas (Luanda HCTA, 28-29 Mai). Speaker + Patrocinador Platina (COPIA). Lançou publicamente o produto COPIA Quasar na palestra "Soberania Tecnológica na Análise de Infraestruturas Críticas Utilizando Software QUASAR". Organizado pelo Governo de Angola.',
+        suggests: ['Fala sobre o Quasar']
+      },
+      en: {
+        answer: 'MINEA 2026 — 2nd International Conference on Energy and Water (Luanda HCTA, May 28-29). Speaker + Platinum Sponsor (COPIA). Publicly launched the COPIA Quasar product in the talk "Technological Sovereignty in Critical Infrastructure Analysis Using QUASAR Software". Organized by the Government of Angola.',
+        suggests: ['Tell me about Quasar']
+      }
+    },
+    {
+      id: 'aimct',
+      keywords: ['aimct', 'asset', 'integrity', 'maintenance', 'corrosion', 'turnaround', 'cogent'],
+      pt: {
+        answer: 'AIMCT Angola 2026 — Asset Integrity, Maintenance, Corrosion & Turnaround Conference (HCTA Luanda, 14 Jul). Edmilson foi speaker oficial, premiado com Certificate of Appreciation pela Cogent Solutions. Tema: integridade de activos offshore envelhecidos, gestão de corrosão, resiliência de engenharia.',
+        suggests: ['Que outros reconhecimentos?']
+      },
+      en: {
+        answer: 'AIMCT Angola 2026 — Asset Integrity, Maintenance, Corrosion & Turnaround Conference (HCTA Luanda, Jul 14). Edmilson was official speaker, awarded Certificate of Appreciation by Cogent Solutions. Theme: aging offshore asset integrity, corrosion management, engineering resilience.',
+        suggests: ['Other recognitions?']
+      }
+    },
+    {
+      id: 'huawei',
+      keywords: ['huawei', 'innovation', 'masterclass', 'treino'],
+      pt: {
+        answer: 'Masterclass COPIA no Huawei Luanda Innovation Center. Edmilson liderou formação técnica sobre IA, ML e Deep Learning aplicados a O&G — taxonomia (ANI/AGI/ASI, supervisionado/não-supervisionado/reforço) e implementação prática (Random Forest, XGBoost, ANN, CNN, kMeans, LSTM). Auditório Huawei lotado.',
+        suggests: ['Que outros eventos?']
+      },
+      en: {
+        answer: 'COPIA Masterclass at the Huawei Luanda Innovation Center. Edmilson led technical training on AI, ML and Deep Learning applied to O&G — taxonomy (ANI/AGI/ASI, supervised/unsupervised/reinforcement) and practical implementation (Random Forest, XGBoost, ANN, CNN, kMeans, LSTM). Packed Huawei auditorium.',
+        suggests: ['Other events?']
+      }
+    },
+    {
+      id: 'capital-humano',
+      keywords: ['capital humano', 'human capital', 'desenvolvimento', 'development', 'pnfq', 'utg', '50 anos', 'independência'],
+      pt: {
+        answer: 'Conferência Nacional sobre o Capital Humano e o Desenvolvimento de Angola (Luanda, 29 Ago 2026). Organizada pelo Governo de Angola via UTG/PNFQ no âmbito das celebrações dos 50 anos da Independência Nacional. Edmilson participou representando a nova geração angolana de executivos em ciência e tecnologia.',
+        suggests: ['Que outros eventos em Angola?']
+      },
+      en: {
+        answer: 'National Conference on Human Capital and the Development of Angola (Luanda, Aug 29, 2026). Organized by the Government of Angola via UTG/PNFQ as part of the 50-years-of-Independence celebrations. Edmilson participated representing the new Angolan generation of executives in science and technology.',
+        suggests: ['Other events in Angola?']
+      }
+    },
+    {
+      id: 'publications',
+      keywords: ['publicações', 'publicacoes', 'publications', 'artigos', 'articles', 'papers', 'investigação', 'research', 'ciência', 'science'],
+      pt: {
+        answer: 'Edmilson publicou 3 artigos flagship COPIA Seis em 2026: (1) "1.4 m of Certainty — False Precision in Test-Based Oil-Water Contact Windows" (Nov); (2) "See Before You Pick — Volume Rendering as a Trackability Map" (Nov); (3) "99.9% Locally Right — And Why That Is Not Enough" (Out). Plus 6 publicações anteriores em OILFIELD ENGINEERING e WellDesk (2024).',
+        suggests: ['De que trata o artigo "99.9%"?']
+      },
+      en: {
+        answer: 'Edmilson published 3 flagship COPIA Seis papers in 2026: (1) "1.4 m of Certainty — False Precision in Test-Based Oil-Water Contact Windows" (Nov); (2) "See Before You Pick — Volume Rendering as a Trackability Map" (Nov); (3) "99.9% Locally Right — And Why That Is Not Enough" (Oct). Plus 6 earlier publications in OILFIELD ENGINEERING and WellDesk (2024).',
+        suggests: ['What is the "99.9%" paper about?']
+      }
+    },
+    {
+      id: 'awards',
+      keywords: ['prêmios', 'premios', 'awards', 'reconhecimentos', 'recognitions', 'medalha', 'medal', 'embaixada', 'embassy', 'honor', 'jovens', 'cientistas'],
+      pt: {
+        answer: 'Edmilson recebeu Medalha de Honra da Embaixada de Angola na Rússia (Ago 2025, Salão Oval). Também 2º lugar na Conferência de Jovens Cientistas da Universidade de Ufa (2024) pelo software WellLog Pro com ML. Certificate of Appreciation no AIMCT Angola 2026.',
+        suggests: ['Que outros eventos?']
+      },
+      en: {
+        answer: 'Edmilson received the Honor Medal from the Angolan Embassy in Russia (Aug 2025, Oval Hall). Also 2nd place at the Ufa University Young Scientists Conference (2024) for the WellLog Pro software with ML. Certificate of Appreciation at AIMCT Angola 2026.',
+        suggests: ['Any other events?']
+      }
+    },
+    {
+      id: 'contact',
+      keywords: ['contacto', 'contato', 'contact', 'email', 'whatsapp', 'telefone', 'phone'],
+      pt: {
+        answer: 'Podes contactar o Edmilson directamente:\n• WhatsApp: +244 933 514 132 (resposta directa 24/7)\n• Email: praiae180@gmail.com\n• Localizações: Luanda · Lisboa · Ufa',
+        suggests: ['Agendar consultoria']
+      },
+      en: {
+        answer: 'You can reach Edmilson directly:\n• WhatsApp: +244 933 514 132 (direct reply 24/7)\n• Email: praiae180@gmail.com\n• Locations: Luanda · Lisbon · Ufa',
+        suggests: ['Book consultation']
+      },
+      cta: true
+    },
+    {
+      id: 'competencies',
+      keywords: ['competências', 'competencias', 'skills', 'especialidades', 'ferramentas', 'tools', 'python', 'petrel', 'eclipse'],
+      pt: {
+        answer: 'Competências principais: Machine Learning & IA, Interpretação Sísmica, Modelagem de Reservatórios, Análise Petrofísica, Inferência Causal. Ferramentas: Python, Petrel, ECLIPSE. Formação profissional sénior.',
+        suggests: ['Que produtos COPIA?', 'Agendar consultoria']
+      },
+      en: {
+        answer: 'Main competencies: Machine Learning & AI, Seismic Interpretation, Reservoir Modeling, Petrophysical Analysis, Causal Inference. Tools: Python, Petrel, ECLIPSE. Senior professional training.',
+        suggests: ['Which COPIA products?', 'Book consultation']
+      }
+    }
+  ];
+  const KB = KBx.map(e => ({ id: e.id, keywords: e.keywords, answer: e[siteLang].answer, suggests: e[siteLang].suggests, cta: e.cta })) as unknown as Array<{ id: string; keywords: string[]; answer: string; suggests?: string[]; cta?: boolean }>;
+
+
+  const normalize = (s: string): string =>
+    s.toLowerCase()
+     .normalize('NFD').replace(/[̀-ͯ]/g, '')
+     .replace(/[^a-z0-9\s]/g, ' ')
+     .replace(/\s+/g, ' ')
+     .trim();
+
+  const findKBAnswer = (userInput: string): ChatMsg => {
+    const t = UI[siteLang];
+    const words = normalize(userInput).split(/\s+/).filter(w => w.length > 2);
+    if (words.length === 0) {
+      return { role: 'bot', text: t.fallback, suggests: [...t.fallbackSuggests], cta: true };
+    }
+    let best: { score: number; entry: typeof KB[number] | null } = { score: 0, entry: null };
+    for (const entry of KB) {
+      let score = 0;
+      for (const kw of entry.keywords) {
+        const nk = normalize(kw);
+        for (const w of words) {
+          if (nk === w) score += 3;
+          else if (nk.includes(w) || w.includes(nk)) score += 1;
+        }
+      }
+      if (score > best.score) best = { score, entry };
+    }
+    if (best.entry && best.score >= 1) {
+      return { role: 'bot', text: best.entry.answer, suggests: best.entry.suggests, cta: best.entry.cta };
+    }
+    return { role: 'bot', text: t.fallback, suggests: [...t.fallbackSuggests], cta: true };
+  };
+
+  const sendChatMessage = (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    setChatMessages(prev => [...prev, { role: 'user', text: trimmed }]);
+    setChatInput('');
+    setChatTyping(true);
+    setTimeout(() => {
+      setChatMessages(prev => [...prev, findKBAnswer(trimmed)]);
+      setChatTyping(false);
+    }, 650);
+  };
+
+  // Reset greeting when language changes
+  useEffect(() => {
+    setChatMessages([{ role: 'bot', text: UI[siteLang].greet, suggests: [...UI[siteLang].greetSuggests] }]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [siteLang]);
+
+  // Auto-open chat once per session, 2.5s after loading finishes
+  useEffect(() => {
+    if (isLoading) return;
+    try {
+      if (sessionStorage.getItem('chatGreeted') === '1') return;
+    } catch { /* ignore */ }
+    const t = setTimeout(() => {
+      setChatOpen(true);
+      try { sessionStorage.setItem('chatGreeted', '1'); } catch { /* ignore */ }
+    }, 2500);
+    return () => clearTimeout(t);
+  }, [isLoading]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1200);
@@ -74,7 +485,7 @@ const Portfolio: React.FC = () => {
           textTransform: 'uppercase',
           opacity: 0.8
         }}>
-          Carregando Portfólio Executivo
+          {t('Carregando Portfólio Executivo', 'Loading Executive Portfolio')}
         </div>
       </div>
     );
@@ -111,23 +522,23 @@ const Portfolio: React.FC = () => {
             color: '#0f172a',
             letterSpacing: '-0.02em'
           }}>
-            {isMobile ? 'Dr. Edmilson' : 'Dr. Edmilson Delfim Praia'}
+            {isMobile ? 'Edmilson Praia' : 'Edmilson Delfim Praia'}
           </div>
           
           {/* Desktop Menu */}
           {!isMobile && (
-            <div style={{ display: 'flex', gap: '28px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
               {[
-                { key: 'home', label: 'Início' },
-                { key: 'about', label: 'Perfil' },
-                { key: 'experience', label: 'Experiência' },
-                { key: 'speaking', label: 'Palestras' },
-                { key: 'products', label: 'Produtos' },
-                { key: 'education', label: 'Formação' },
-                { key: 'publications', label: 'Publicações' },
-                { key: 'awards', label: 'Reconhecimentos' },
-                { key: 'gallery', label: 'Galeria' },
-                { key: 'contact', label: 'Contato' }
+                { key: 'home', label: t('Início', 'Home') },
+                { key: 'about', label: t('Perfil', 'Profile') },
+                { key: 'experience', label: t('Experiência', 'Experience') },
+                { key: 'speaking', label: t('Palestras', 'Talks') },
+                { key: 'products', label: t('Produtos', 'Products') },
+                { key: 'education', label: t('Formação', 'Education') },
+                { key: 'publications', label: t('Publicações', 'Publications') },
+                { key: 'awards', label: t('Reconhecimentos', 'Awards') },
+                { key: 'gallery', label: t('Galeria', 'Gallery') },
+                { key: 'contact', label: t('Contato', 'Contact') }
               ].map((item) => (
                 <button
                   key={item.key}
@@ -166,77 +577,281 @@ const Portfolio: React.FC = () => {
                   )}
                 </button>
               ))}
+
+              {/* Language toggle */}
+              <div style={{
+                display: 'inline-flex',
+                background: '#f1f5f9',
+                border: '1px solid #e2e8f0',
+                borderRadius: '8px',
+                padding: '3px',
+                marginLeft: '8px'
+              }}>
+                {(['pt', 'en'] as const).map(lg => (
+                  <button
+                    key={lg}
+                    onClick={() => setSiteLang(lg)}
+                    aria-label={`Switch to ${lg.toUpperCase()}`}
+                    style={{
+                      padding: '4px 10px',
+                      fontSize: '11px',
+                      fontWeight: '700',
+                      background: siteLang === lg ? 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)' : 'transparent',
+                      color: siteLang === lg ? 'white' : '#64748b',
+                      border: 'none',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      letterSpacing: '0.08em',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >{lg.toUpperCase()}</button>
+                ))}
+              </div>
             </div>
           )}
-          
-          {/* Mobile Menu Button */}
+
+          {/* Mobile controls */}
           {isMobile && (
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '8px',
-                color: '#0f172a'
-              }}
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          )}
-        </div>
-        
-        {/* Mobile Menu */}
-        {isMobile && mobileMenuOpen && (
-          <div style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            backgroundColor: 'rgba(255, 255, 255, 0.98)',
-            backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
-            padding: '20px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px'
-          }}>
-            {[
-              { key: 'home', label: 'Início' },
-              { key: 'about', label: 'Perfil' },
-              { key: 'experience', label: 'Experiência' },
-              { key: 'speaking', label: 'Palestras' },
-              { key: 'products', label: 'Produtos' },
-              { key: 'education', label: 'Formação' },
-              { key: 'publications', label: 'Publicações' },
-              { key: 'awards', label: 'Reconhecimentos' },
-              { key: 'gallery', label: 'Galeria' },
-              { key: 'contact', label: 'Contato' }
-            ].map((item) => (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {/* Mobile language toggle */}
+              <div style={{
+                display: 'inline-flex',
+                background: '#f1f5f9',
+                border: '1px solid #e2e8f0',
+                borderRadius: '7px',
+                padding: '2px'
+              }}>
+                {(['pt', 'en'] as const).map(lg => (
+                  <button
+                    key={lg}
+                    onClick={() => setSiteLang(lg)}
+                    aria-label={`Switch to ${lg.toUpperCase()}`}
+                    style={{
+                      padding: '3px 8px',
+                      fontSize: '10px',
+                      fontWeight: '700',
+                      background: siteLang === lg ? 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)' : 'transparent',
+                      color: siteLang === lg ? 'white' : '#64748b',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      letterSpacing: '0.08em'
+                    }}
+                  >{lg.toUpperCase()}</button>
+                ))}
+              </div>
+
               <button
-                key={item.key}
-                onClick={() => {
-                  scrollToSection(item.key);
-                  setMobileMenuOpen(false);
-                }}
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 style={{
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                  color: activeSection === item.key ? '#1e40af' : '#64748b',
-                  textAlign: 'left',
-                  padding: '12px 0',
-                  borderBottom: '1px solid #f1f5f9'
+                  padding: '8px',
+                  color: '#0f172a'
                 }}
               >
-                {item.label}
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
-            ))}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
+        
       </nav>
+
+      {/* Mobile Menu — Modern slide-in sidebar */}
+      {isMobile && (
+        <>
+          {/* Backdrop */}
+          <div
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.6)',
+              backdropFilter: 'blur(4px)',
+              zIndex: 1998,
+              opacity: mobileMenuOpen ? 1 : 0,
+              pointerEvents: mobileMenuOpen ? 'auto' : 'none',
+              transition: 'opacity 0.3s ease'
+            }}
+          />
+          {/* Sidebar */}
+          <aside style={{
+            position: 'fixed',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            width: '85vw',
+            maxWidth: '340px',
+            background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
+            zIndex: 1999,
+            transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
+            transition: 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)',
+            display: 'flex',
+            flexDirection: 'column',
+            boxShadow: '-20px 0 60px rgba(0,0,0,0.4)'
+          }}>
+            {/* Header */}
+            <div style={{
+              padding: '24px 24px 20px',
+              borderBottom: '1px solid rgba(255,255,255,0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div>
+                <div style={{
+                  fontSize: '10px',
+                  fontWeight: '700',
+                  color: '#60a5fa',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  marginBottom: '4px'
+                }}>{t('Portfólio', 'Portfolio')}</div>
+                <div style={{
+                  fontSize: '18px',
+                  fontWeight: '700',
+                  color: 'white',
+                  letterSpacing: '-0.01em'
+                }}>Edmilson Praia</div>
+              </div>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Fechar menu"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '10px',
+                  color: '#e2e8f0',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease'
+                }}
+                onTouchStart={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Nav items */}
+            <nav style={{
+              flex: 1,
+              overflowY: 'auto',
+              padding: '16px 12px'
+            }}>
+              {[
+                { key: 'home', label: t('Início', 'Home'), icon: Home, color: '#60a5fa' },
+                { key: 'about', label: t('Perfil', 'Profile'), icon: User, color: '#7c3aed' },
+                { key: 'experience', label: t('Experiência', 'Experience'), icon: Briefcase, color: '#0ea5e9' },
+                { key: 'speaking', label: t('Palestras', 'Talks'), icon: Mic, color: '#f59e0b' },
+                { key: 'products', label: t('Produtos', 'Products'), icon: Code, color: '#22c55e' },
+                { key: 'education', label: t('Formação', 'Education'), icon: GraduationCap, color: '#a855f7' },
+                { key: 'publications', label: t('Publicações', 'Publications'), icon: FileText, color: '#ec4899' },
+                { key: 'awards', label: t('Reconhecimentos', 'Awards'), icon: Award, color: '#dc2626' },
+                { key: 'gallery', label: t('Galeria', 'Gallery'), icon: Camera, color: '#06b6d4' },
+                { key: 'contact', label: t('Contato', 'Contact'), icon: Mail, color: '#10b981' }
+              ].map((item, i) => {
+                const isActive = activeSection === item.key;
+                return (
+                  <button
+                    key={item.key}
+                    onClick={() => {
+                      scrollToSection(item.key);
+                      setMobileMenuOpen(false);
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '14px',
+                      padding: '12px 14px',
+                      marginBottom: '4px',
+                      background: isActive ? `${item.color}20` : 'transparent',
+                      border: `1px solid ${isActive ? `${item.color}40` : 'transparent'}`,
+                      borderRadius: '12px',
+                      color: isActive ? 'white' : '#cbd5e1',
+                      cursor: 'pointer',
+                      fontSize: '15px',
+                      fontWeight: '600',
+                      textAlign: 'left',
+                      transition: 'all 0.25s ease',
+                      animation: mobileMenuOpen ? `fadeInLeft 0.4s ease-out ${i * 0.04}s both` : 'none'
+                    }}
+                  >
+                    <div style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '10px',
+                      background: isActive ? `linear-gradient(135deg, ${item.color} 0%, ${item.color}cc 100%)` : `${item.color}15`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      transition: 'all 0.3s ease',
+                      boxShadow: isActive ? `0 6px 16px ${item.color}50` : 'none'
+                    }}>
+                      <item.icon size={17} style={{ color: isActive ? 'white' : item.color }} />
+                    </div>
+                    <span style={{ flex: 1 }}>{item.label}</span>
+                    {isActive && (
+                      <div style={{
+                        width: '6px', height: '6px',
+                        borderRadius: '50%',
+                        background: item.color,
+                        boxShadow: `0 0 12px ${item.color}`
+                      }}></div>
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Footer CTAs */}
+            <div style={{
+              padding: '16px 20px 24px',
+              borderTop: '1px solid rgba(255,255,255,0.08)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+              <a
+                href="https://wa.me/244933514132?text=Ol%C3%A1%20Edmilson%2C%20gostaria%20de%20falar%20consigo."
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '12px',
+                  background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                  color: 'white',
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  borderRadius: '10px',
+                  textDecoration: 'none',
+                  boxShadow: '0 6px 16px rgba(34,197,94,0.3)'
+                }}
+              >
+                <Phone size={14} /> WhatsApp
+              </a>
+              <div style={{
+                fontSize: '11px',
+                color: '#64748b',
+                textAlign: 'center',
+                letterSpacing: '0.05em'
+              }}>+244 933 514 132 · praiae180@gmail.com</div>
+            </div>
+          </aside>
+        </>
+      )}
 
       {/* Hero Section */}
       <section id="home" style={{
@@ -293,7 +908,7 @@ const Portfolio: React.FC = () => {
                 textTransform: 'uppercase',
                 backdropFilter: 'blur(10px)'
               }}>
-                Geociências de Petróleo · PhD Track
+                {t('Geociências de Petróleo · PhD Track', 'Petroleum Geosciences · PhD Track')}
               </div>
               <div style={{
                 display: 'inline-flex',
@@ -315,23 +930,15 @@ const Portfolio: React.FC = () => {
             </div>
 
             <h1 style={{
-              fontFamily: '"Playfair Display", Georgia, serif',
-              fontSize: isMobile ? '42px' : '72px',
+              fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+              fontSize: isMobile ? '40px' : '68px',
               fontWeight: '700',
               color: 'white',
-              lineHeight: '1.0',
-              letterSpacing: '-0.025em',
+              lineHeight: '1.05',
+              letterSpacing: '-0.03em',
               marginBottom: isMobile ? '16px' : '20px'
             }}>
-              Dr. Edmilson
-              <br />
-              <span style={{
-                background: 'linear-gradient(90deg, #60a5fa 0%, #c4b5fd 60%, #86efac 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontStyle: 'italic'
-              }}>Delfim Praia</span>
+              Edmilson Delfim Praia
             </h1>
 
             {/* Keynote speaker strip */}
@@ -360,7 +967,10 @@ const Portfolio: React.FC = () => {
                 fontWeight: '600',
                 letterSpacing: '0.02em'
               }}>
-                Keynote Speaker · 10 palcos continentais em 2026 · NIEC · MINEA · AIMCT · NOGC · Capital Humano · Huawei · AOG · AHTLS · AEW · AGLNG
+                {t(
+                  'Keynote Speaker · 10 palcos continentais em 2026 · NIEC · MINEA · AIMCT · NOGC · Capital Humano · Huawei · AOG · AHTLS · AEW · AGLNG',
+                  'Keynote Speaker · 10 African stages in 2026 · NIEC · MINEA · AIMCT · NOGC · Capital Humano · Huawei · AOG · AHTLS · AEW · AGLNG'
+                )}
               </span>
             </div>
 
@@ -372,8 +982,14 @@ const Portfolio: React.FC = () => {
               maxWidth: isMobile ? '100%' : '620px'
             }}>
               {isMobile
-                ? 'Geocientista e executivo angolano. Lidero I&D em geociências aplicadas e IA na COPIA Group — com produtos próprios já em mercado e presença em palcos de energia da África.'
-                : 'Geocientista-executivo angolano a liderar a soberania tecnológica africana em interpretação sísmica e modelagem de reservatórios. Director de I&D da COPIA Group of Companies, co-criador dos produtos COPIA Seis e COPIA DynamicSim, e speaker ativo nos maiores fóruns de energia do continente em 2026.'
+                ? t(
+                    'Geocientista e executivo angolano. Lidero I&D em geociências aplicadas e IA na COPIA Group — com produtos próprios já em mercado e presença em palcos de energia da África.',
+                    'Angolan geoscientist and executive. Leading R&D in applied geosciences and AI at COPIA Group — with proprietary products already in market and presence across Africa\'s energy stages.'
+                  )
+                : t(
+                    'Geocientista-executivo angolano a liderar a soberania tecnológica africana em interpretação sísmica e modelagem de reservatórios. Director de I&D da COPIA Group of Companies, criador dos produtos COPIA Seis, COPIA DynamicSim e COPIA Quasar, e speaker ativo nos maiores fóruns de energia do continente em 2026.',
+                    'Angolan geoscientist-executive leading African technological sovereignty in seismic interpretation and reservoir modeling. R&D Director at COPIA Group of Companies, creator of the COPIA Seis, COPIA DynamicSim and COPIA Quasar products, and active speaker at the continent\'s largest energy forums in 2026.'
+                  )
               }
             </p>
             
@@ -413,41 +1029,7 @@ const Portfolio: React.FC = () => {
                   e.currentTarget.style.boxShadow = '0 4px 15px rgba(30, 64, 175, 0.3)';
                 }}
               >
-                Ver Perfil Completo
-              </button>
-              
-              <button style={{
-                background: 'transparent',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-                color: 'white',
-                padding: isMobile ? '14px 24px' : '14px 32px',
-                borderRadius: '8px',
-                fontSize: '14px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                letterSpacing: '0.02em',
-                textTransform: 'uppercase',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                width: isMobile ? '100%' : 'auto',
-                minHeight: '48px',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.borderColor = 'white';
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}>
-                <Download size={16} />
-                Baixar CV
+                {t('Ver Perfil Completo', 'View Full Profile')}
               </button>
             </div>
             
@@ -502,7 +1084,7 @@ const Portfolio: React.FC = () => {
                 backdropFilter: isMobile ? 'blur(10px)' : 'none'
               }}>
                 <MapPin size={16} />
-                Ufa, Rússia - Luanda, Angola
+                {t('Luanda · Lisboa · Ufa', 'Luanda · Lisbon · Ufa')}
               </div>
             </div>
           </div>
@@ -528,17 +1110,17 @@ const Portfolio: React.FC = () => {
                 marginBottom: '32px',
                 color: '#f1f5f9'
               }}>
-                Resumo Profissional
+                {t('Resumo Profissional', 'Professional Summary')}
               </h3>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 {[
-                  { label: 'Palcos Continentais em 2026', value: '10' },
-                  { label: 'Produtos Tech Liderados', value: '5' },
-                  { label: 'Publicações Científicas', value: '6+' },
-                  { label: 'Países de Consultoria', value: '4' },
-                  { label: 'Prêmios Internacionais', value: '2' },
-                  { label: 'Idiomas', value: '3' }
+                  { label: t('Palcos Continentais em 2026', 'African Stages in 2026'), value: '10' },
+                  { label: t('Produtos Tech Liderados', 'Tech Products Led'), value: '5' },
+                  { label: t('Publicações Científicas', 'Scientific Publications'), value: '6+' },
+                  { label: t('Países de Consultoria', 'Consulting Countries'), value: '4' },
+                  { label: t('Prêmios Internacionais', 'International Awards'), value: '2' },
+                  { label: t('Idiomas', 'Languages'), value: '3' }
                 ].map((stat, index) => (
                   <div key={index} style={{
                     display: 'flex',
@@ -598,7 +1180,7 @@ const Portfolio: React.FC = () => {
               marginBottom: '14px',
               lineHeight: '1.1'
             }}>
-              Perfil Profissional
+              {t('Perfil Profissional', 'Professional Profile')}
             </h2>
             <div style={{
               width: '48px', height: '4px',
@@ -622,7 +1204,11 @@ const Portfolio: React.FC = () => {
               lineHeight: '1.7',
               margin: 0
             }}>
-              Geocientista-executivo angolano. <strong style={{ color: '#0f172a' }}>Director of R&D & Technology</strong> na COPIA Group of Companies, <strong style={{ color: '#0f172a' }}>Fundador</strong> da EDELPHIA (Lisboa) e da Justificações Acadêmicas. Doutoramento em Geofísica Aplicada, autor de 3 artigos COPIA Seis em 2026 e speaker em <strong style={{ color: '#1e40af' }}>10 fóruns continentais</strong> este ano.
+              {siteLang === 'pt' ? (
+                <>Geocientista-executivo angolano. <strong style={{ color: '#0f172a' }}>Director of R&D & Technology</strong> na COPIA Group of Companies, <strong style={{ color: '#0f172a' }}>Fundador</strong> da EDELPHIA (Lisboa) e da Justificações Acadêmicas. Doutoramento em Geofísica Aplicada, autor de 3 artigos COPIA Seis em 2026 e speaker em <strong style={{ color: '#1e40af' }}>10 fóruns continentais</strong> este ano.</>
+              ) : (
+                <>Angolan geoscientist-executive. <strong style={{ color: '#0f172a' }}>Director of R&D & Technology</strong> at COPIA Group of Companies, <strong style={{ color: '#0f172a' }}>Founder</strong> of EDELPHIA (Lisbon) and Justificações Acadêmicas. PhD in Applied Geophysics, author of 3 COPIA Seis papers in 2026 and speaker at <strong style={{ color: '#1e40af' }}>10 African stages</strong> this year.</>
+              )}
             </p>
           </div>
 
@@ -634,10 +1220,10 @@ const Portfolio: React.FC = () => {
             marginBottom: isMobile ? '24px' : '32px'
           }}>
             {[
-              { icon: Building, label: 'Posição', value: 'Director R&D · COPIA', color: '#7c3aed' },
-              { icon: GraduationCap, label: 'Formação', value: 'Doutoramento · Geofísica', color: '#1e40af' },
-              { icon: Globe, label: 'Base', value: 'Luanda · Lisboa · Ufa', color: '#059669' },
-              { icon: Award, label: 'Palcos 2026', value: '10 fóruns africanos', color: '#dc2626' }
+              { icon: Building, label: t('Posição', 'Position'), value: t('Director R&D · COPIA', 'Director R&D · COPIA'), color: '#7c3aed' },
+              { icon: GraduationCap, label: t('Formação', 'Education'), value: t('Doutoramento · Geofísica', 'PhD · Geophysics'), color: '#1e40af' },
+              { icon: Globe, label: t('Base', 'Base'), value: t('Luanda · Lisboa · Ufa', 'Luanda · Lisbon · Ufa'), color: '#059669' },
+              { icon: Award, label: t('Palcos 2026', '2026 Stages'), value: t('10 fóruns africanos', '10 African forums'), color: '#dc2626' }
             ].map((stat, i) => (
               <div key={i} style={{
                 background: 'white',
@@ -690,17 +1276,17 @@ const Portfolio: React.FC = () => {
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
               marginBottom: '14px'
-            }}>Competências Principais</div>
+            }}>{t('Competências Principais', 'Core Competencies')}</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               {[
-                { label: 'Machine Learning & IA', c: '#7c3aed' },
-                { label: 'Interpretação Sísmica', c: '#1e40af' },
-                { label: 'Modelagem de Reservatórios', c: '#059669' },
-                { label: 'Análise Petrofísica', c: '#dc2626' },
+                { label: t('Machine Learning & IA', 'Machine Learning & AI'), c: '#7c3aed' },
+                { label: t('Interpretação Sísmica', 'Seismic Interpretation'), c: '#1e40af' },
+                { label: t('Modelagem de Reservatórios', 'Reservoir Modeling'), c: '#059669' },
+                { label: t('Análise Petrofísica', 'Petrophysical Analysis'), c: '#dc2626' },
                 { label: 'Python', c: '#eab308' },
                 { label: 'Petrel · ECLIPSE', c: '#0ea5e9' },
-                { label: 'Inferência Causal', c: '#ec4899' },
-                { label: 'Formação Profissional', c: '#f97316' }
+                { label: t('Inferência Causal', 'Causal Inference'), c: '#ec4899' },
+                { label: t('Formação Profissional', 'Professional Training'), c: '#f97316' }
               ].map((sk, i) => (
                 <span key={i} style={{
                   fontSize: '12px',
@@ -732,7 +1318,7 @@ const Portfolio: React.FC = () => {
               marginBottom: '16px',
               letterSpacing: '-0.02em'
             }}>
-              Experiência Profissional
+              {t('Experiência Profissional', 'Professional Experience')}
             </h2>
             <div style={{
               width: '40px',
@@ -746,7 +1332,7 @@ const Portfolio: React.FC = () => {
               color: '#64748b',
               maxWidth: '600px'
             }}>
-              Liderando organizações em inovação em geociências de petróleo e excelência acadêmica
+              {t('Liderando organizações em inovação em geociências de petróleo e excelência acadêmica', 'Leading organizations in petroleum geosciences innovation and academic excellence')}
             </p>
           </div>
           
@@ -759,65 +1345,97 @@ const Portfolio: React.FC = () => {
               {
                 title: 'Director of R&D & Technology',
                 company: 'COPIA Group of Companies',
-                period: 'Atual',
-                type: 'Executivo · I&D',
+                period: t('Atual', 'Current'),
+                type: t('Executivo · I&D', 'Executive · R&D'),
                 icon: Building,
                 color: '#7c3aed',
-                tagline: 'Lidero I&D e desenvolvimento de 3 produtos COPIA — Seis, DynamicSim e Quasar.',
-                chips: ['IA', 'Geociências', 'ASGA', 'Expansão Namíbia'],
-                achievements: [
+                tagline: t(
+                  'Lidero I&D e desenvolvimento de 3 produtos COPIA — Seis, DynamicSim e Quasar.',
+                  'I lead R&D and development of 3 COPIA products — Seis, DynamicSim and Quasar.'
+                ),
+                chips: [t('IA', 'AI'), t('Geociências', 'Geosciences'), 'ASGA', t('Expansão Namíbia', 'Namibia Expansion')],
+                achievements: siteLang === 'pt' ? [
                   'Lidero a agenda de I&D em geociências aplicadas, IA e transformação digital industrial em uma das maiores empresas angolanas de engenharia',
                   'Responsável pelo desenvolvimento dos produtos proprietários COPIA Seis (interpretação sísmica com IA), COPIA DynamicSim (modelagem dinâmica de reservatórios) e COPIA Quasar (análise de infraestruturas críticas)',
                   'Signatário do protocolo de cooperação com a Associação de Geofísica de Angola (ASGA) em Setembro de 2025',
                   'Apoio à expansão regional da COPIA para a África Austral, incluindo o novo escritório em Windhoek, Namíbia'
+                ] : [
+                  'I lead the R&D agenda in applied geosciences, AI and industrial digital transformation at one of Angola\'s largest engineering companies',
+                  'Responsible for developing proprietary products COPIA Seis (AI-powered seismic interpretation), COPIA DynamicSim (dynamic reservoir modeling) and COPIA Quasar (critical infrastructure analysis)',
+                  'Signatory of the cooperation protocol with the Angola Geophysics Association (ASGA) in September 2025',
+                  'Support COPIA\'s regional expansion into Southern Africa, including the new office in Windhoek, Namibia'
                 ]
               },
               {
-                title: 'Fundador',
+                title: t('Fundador', 'Founder'),
                 company: 'EDELPHIA',
-                period: 'Atual · Lisboa',
+                period: t('Atual · Lisboa', 'Current · Lisbon'),
                 type: 'Founder',
                 icon: Star,
                 color: '#0ea5e9',
-                tagline: 'Data science e algoritmos — Φ = ∫ knowledge · dt.',
-                chips: ['Lisboa', 'ML', 'Inferência causal', 'Fundador'],
-                achievements: [
+                tagline: t(
+                  'Data science e algoritmos — Φ = ∫ knowledge · dt.',
+                  'Data science and algorithms — Φ = ∫ knowledge · dt.'
+                ),
+                chips: [t('Lisboa', 'Lisbon'), 'ML', t('Inferência causal', 'Causal inference'), t('Fundador', 'Founder')],
+                achievements: siteLang === 'pt' ? [
                   'Fundei a EDELPHIA — empresa de data science e algoritmos sob a assinatura "Science · Algorithms · Intelligence"',
                   'Framework baseado em quatro pilares: precisão em estimação estatística, minimização de risco em machine learning, análise de inferência causal e acumulação contínua de conhecimento',
                   'Equação central Φ = ∫ knowledge · dt — modelo matemático que orienta a cultura e o método da empresa',
                   'Sede em Lisboa (38.7223° N · 9.1393° W) · site oficial em edelphia.vercel.app'
+                ] : [
+                  'Founded EDELPHIA — a data science and algorithms company under the signature "Science · Algorithms · Intelligence"',
+                  'Framework based on four pillars: statistical estimation accuracy, machine learning risk minimization, causal inference analysis and continuous knowledge accumulation',
+                  'Core equation Φ = ∫ knowledge · dt — mathematical model guiding the company\'s culture and method',
+                  'Headquartered in Lisbon (38.7223° N · 9.1393° W) · official site at edelphia.vercel.app'
                 ]
               },
               {
-                title: 'Formador & Consultor Técnico Sénior',
+                title: t('Formador & Consultor Técnico Sénior', 'Senior Trainer & Technical Consultant'),
                 company: 'Justificações Acadêmicas',
-                period: '2020 — Presente',
-                type: 'Fundador & CEO',
+                period: t('2020 — Presente', '2020 — Present'),
+                type: t('Fundador & CEO', 'Founder & CEO'),
                 icon: BookOpen,
                 color: '#1e40af',
-                tagline: 'Formação profissional sénior para quadros Sonangol, Chevron, ANPG.',
-                chips: ['Petróleo', 'Python', 'BR · LY · MZ', '5 anos'],
-                achievements: [
+                tagline: t(
+                  'Formação profissional sénior para quadros Sonangol, Chevron, ANPG.',
+                  'Senior professional training for Sonangol, Chevron, ANPG staff.'
+                ),
+                chips: [t('Petróleo', 'Oil & Gas'), 'Python', 'BR · LY · MZ', t('5 anos', '5 years')],
+                achievements: siteLang === 'pt' ? [
                   'Fundei e lidero programas especializados de formação profissional em geociências, engenharia de petróleo e programação Python',
                   'Atendo profissionais de grandes empresas petrolíferas incluindo Sonangol, Chevron e ANPG com soluções de treinamento personalizadas',
                   'Ministro formação avançada a quadros técnicos sénior de instituições de referência (UAN, UCAN, ISPTEC) — focada em profissionais, não em estudantes',
                   'Atuo como consultor internacional para profissionais no Brasil, Líbia e Moçambique em modelagem de reservatórios'
+                ] : [
+                  'Founded and lead specialized professional training programs in geosciences, petroleum engineering and Python programming',
+                  'I serve professionals from major oil companies including Sonangol, Chevron and ANPG with customized training solutions',
+                  'I deliver advanced training to senior technical staff from leading institutions (UAN, UCAN, ISPTEC) — focused on professionals, not students',
+                  'Act as international consultant for professionals in Brazil, Libya and Mozambique in reservoir modeling'
                 ]
               },
               {
-                title: 'Analista de Dados · Líder Técnico',
+                title: t('Analista de Dados · Líder Técnico', 'Data Analyst · Technical Lead'),
                 company: 'WellDesk',
-                period: 'Atual',
-                type: 'Líder Técnico',
+                period: t('Atual', 'Current'),
+                type: t('Líder Técnico', 'Technical Lead'),
                 icon: Code,
                 color: '#059669',
-                tagline: 'Soluções de ML para análise petrofísica e modelagem geológica.',
+                tagline: t(
+                  'Soluções de ML para análise petrofísica e modelagem geológica.',
+                  'ML solutions for petrophysical analysis and geological modeling.'
+                ),
                 chips: ['Well Log Web Pro', 'Petrel', 'ECLIPSE', 'Python'],
-                achievements: [
+                achievements: siteLang === 'pt' ? [
                   'Desenvolvo soluções avançadas de Machine Learning para análise de dados petrofísicos e geofísicos',
                   'Criei a plataforma Well Log Web Pro, integrando IA com visualização interativa para suporte à decisão',
                   'Aplico ferramentas avançadas incluindo Python, Petrel e ECLIPSE em projetos de modelagem geológica',
                   'Lidero iniciativas de análise, imputação e predição de dados para otimização de reservatórios de petróleo'
+                ] : [
+                  'I develop advanced Machine Learning solutions for petrophysical and geophysical data analysis',
+                  'Created the Well Log Web Pro platform, integrating AI with interactive visualization for decision support',
+                  'Apply advanced tools including Python, Petrel and ECLIPSE in geological modeling projects',
+                  'I lead data analysis, imputation and prediction initiatives for petroleum reservoir optimization'
                 ]
               }
             ].map((experience, index) => {
@@ -989,7 +1607,7 @@ const Portfolio: React.FC = () => {
                   onMouseOver={(e) => (e.currentTarget.style.opacity = '0.7')}
                   onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
                 >
-                  {isExpanded ? 'Ver menos' : 'Ver detalhes'}
+                  {isExpanded ? t('Ver menos', 'Show less') : t('Ver detalhes', 'Show details')}
                   <ChevronDown size={14} style={{
                     transition: 'transform 0.3s ease',
                     transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'
@@ -1030,7 +1648,7 @@ const Portfolio: React.FC = () => {
                     }}
                   >
                     <Globe size={14} />
-                    {experience.company === 'EDELPHIA' ? 'Visitar edelphia.vercel.app' : 'Visitar justificacoesacademicas.org'}
+                    {experience.company === 'EDELPHIA' ? t('Visitar edelphia.vercel.app', 'Visit edelphia.vercel.app') : t('Visitar justificacoesacademicas.org', 'Visit justificacoesacademicas.org')}
                   </a>
                 )}
               </div>
@@ -1059,7 +1677,7 @@ const Portfolio: React.FC = () => {
               textTransform: 'uppercase',
               marginBottom: '16px'
             }}>
-              Keynote Speaker · 2026
+              {t('Keynote Speaker · 2026', 'Keynote Speaker · 2026')}
             </div>
             <h2 style={{
               fontSize: isMobile ? '28px' : '32px',
@@ -1068,7 +1686,7 @@ const Portfolio: React.FC = () => {
               marginBottom: '16px',
               letterSpacing: '-0.02em'
             }}>
-              Palestras & Conferências Internacionais
+              {t('Palestras & Conferências Internacionais', 'International Talks & Conferences')}
             </h2>
             <div style={{
               width: '40px',
@@ -1083,7 +1701,10 @@ const Portfolio: React.FC = () => {
               maxWidth: '720px',
               lineHeight: '1.7'
             }}>
-              Dez palcos continentais em 2026 — de Windhoek a Maputo, passando por Luanda (Huawei Innovation Center, HCTA Talatona), Cape Town e múltiplas conferências ministeriais angolanas. Speaker, keynote, chairperson, masterclass lead e laureado com Certificate of Appreciation nos principais fóruns de energia e capital humano de África.
+              {t(
+                'Dez palcos continentais em 2026 — de Windhoek a Maputo, passando por Luanda (Huawei Innovation Center, HCTA Talatona), Cape Town e múltiplas conferências ministeriais angolanas. Speaker, keynote, chairperson, masterclass lead e laureado com Certificate of Appreciation nos principais fóruns de energia e capital humano de África.',
+                'Ten African stages in 2026 — from Windhoek to Maputo, through Luanda (Huawei Innovation Center, HCTA Talatona), Cape Town and multiple Angolan ministerial conferences. Speaker, keynote, chairperson, masterclass lead and awarded with Certificate of Appreciation at Africa\'s leading energy and human capital forums.'
+              )}
             </p>
           </div>
 
@@ -3535,7 +4156,7 @@ const Portfolio: React.FC = () => {
               textTransform: 'uppercase',
               marginBottom: '16px'
             }}>
-              Software proprietário
+              {t('Software proprietário', 'Proprietary software')}
             </div>
             <h2 style={{
               fontSize: isMobile ? '28px' : '32px',
@@ -3544,7 +4165,7 @@ const Portfolio: React.FC = () => {
               marginBottom: '16px',
               letterSpacing: '-0.02em'
             }}>
-              Produtos & Tecnologias Desenvolvidas
+              {t('Produtos & Tecnologias Desenvolvidas', 'Products & Technologies Developed')}
             </h2>
             <div style={{
               width: '40px',
@@ -3559,7 +4180,10 @@ const Portfolio: React.FC = () => {
               maxWidth: '740px',
               lineHeight: '1.7'
             }}>
-              Produtos de software proprietário desenvolvidos sob a minha responsabilidade directa — na COPIA Group lidero o desenvolvimento dos três produtos flagship (Seis, DynamicSim, Quasar); na WellDesk e em pesquisa própria criei plataformas de IA aplicadas à indústria angolana de óleo e gás.
+              {t(
+                'Produtos de software proprietário desenvolvidos sob a minha responsabilidade directa — na COPIA Group lidero o desenvolvimento dos três produtos flagship (Seis, DynamicSim, Quasar); na WellDesk e em pesquisa própria criei plataformas de IA aplicadas à indústria angolana de óleo e gás.',
+                'Proprietary software products developed under my direct responsibility — at COPIA Group I lead the development of the three flagship products (Seis, DynamicSim, Quasar); at WellDesk and in my own research I created AI platforms applied to Angola\'s oil and gas industry.'
+              )}
             </p>
           </div>
 
@@ -3743,7 +4367,7 @@ const Portfolio: React.FC = () => {
               marginBottom: '16px',
               letterSpacing: '-0.02em'
             }}>
-              Formação Acadêmica
+              {t('Formação Acadêmica', 'Academic Education')}
             </h2>
             <div style={{
               width: '40px',
@@ -3757,7 +4381,7 @@ const Portfolio: React.FC = () => {
               color: '#64748b',
               maxWidth: '600px'
             }}>
-              Formação avançada em instituições prestigiadas em geofísica aplicada e geologia de petróleo
+              {t('Formação avançada em instituições prestigiadas em geofísica aplicada e geologia de petróleo', 'Advanced training at prestigious institutions in applied geophysics and petroleum geology')}
             </p>
           </div>
           
@@ -3908,7 +4532,7 @@ const Portfolio: React.FC = () => {
               textTransform: 'uppercase',
               marginBottom: '16px'
             }}>
-              Research · COPIA Seis
+              {t('Research · COPIA Seis', 'Research · COPIA Seis')}
             </div>
             <h2 style={{
               fontSize: isMobile ? '28px' : '36px',
@@ -3918,7 +4542,7 @@ const Portfolio: React.FC = () => {
               letterSpacing: '-0.025em',
               lineHeight: '1.1'
             }}>
-              Publicações & Pesquisa
+              {t('Publicações & Pesquisa', 'Publications & Research')}
             </h2>
             <div style={{
               width: '48px', height: '4px',
@@ -3931,7 +4555,11 @@ const Portfolio: React.FC = () => {
               maxWidth: '740px',
               lineHeight: '1.7'
             }}>
-              Trabalho de investigação original publicado sob a chancela <strong style={{ color: '#1e40af' }}>COPIA Seis</strong> em 2026 — três artigos consecutivos sobre interpretação sísmica, horizon tracking, cycle skipping e quantificação de incerteza em oil-water contact windows. Mais um conjunto de publicações técnicas internacionais.
+              {siteLang === 'pt' ? (
+                <>Trabalho de investigação original publicado sob a chancela <strong style={{ color: '#1e40af' }}>COPIA Seis</strong> em 2026 — três artigos consecutivos sobre interpretação sísmica, horizon tracking, cycle skipping e quantificação de incerteza em oil-water contact windows. Mais um conjunto de publicações técnicas internacionais.</>
+              ) : (
+                <>Original research published under the <strong style={{ color: '#1e40af' }}>COPIA Seis</strong> brand in 2026 — three consecutive papers on seismic interpretation, horizon tracking, cycle skipping and uncertainty quantification in oil-water contact windows. Plus a set of international technical publications.</>
+              )}
             </p>
           </div>
 
@@ -3943,7 +4571,7 @@ const Portfolio: React.FC = () => {
               <div style={{
                 fontSize: '11px', fontWeight: '700', color: '#1e40af',
                 letterSpacing: '0.15em', textTransform: 'uppercase'
-              }}>Flagship Research · 2026</div>
+              }}>{t('Flagship Research · 2026', 'Flagship Research · 2026')}</div>
               <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, #1e40af, transparent)' }}></div>
             </div>
 
@@ -4159,7 +4787,7 @@ const Portfolio: React.FC = () => {
                     }}
                   >
                     <Download size={15} />
-                    Baixar PDF Completo
+                    {t('Baixar PDF Completo', 'Download Full PDF')}
                   </a>
                 </div>
               ))}
@@ -4174,7 +4802,7 @@ const Portfolio: React.FC = () => {
               <div style={{
                 fontSize: '11px', fontWeight: '700', color: '#64748b',
                 letterSpacing: '0.15em', textTransform: 'uppercase'
-              }}>Publicações Anteriores · 2024</div>
+              }}>{t('Publicações Anteriores · 2024', 'Earlier Publications · 2024')}</div>
               <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, #64748b, transparent)' }}></div>
             </div>
 
@@ -4298,7 +4926,7 @@ const Portfolio: React.FC = () => {
               marginBottom: '16px',
               letterSpacing: '-0.02em'
             }}>
-              Prêmios e Reconhecimentos
+              {t('Prêmios e Reconhecimentos', 'Awards & Recognitions')}
             </h2>
             <div style={{
               width: '40px',
@@ -4312,7 +4940,7 @@ const Portfolio: React.FC = () => {
               color: '#64748b',
               maxWidth: '600px'
             }}>
-              Reconhecimento internacional por contribuições excepcionais às geociências de petróleo e inovação
+              {t('Reconhecimento internacional por contribuições excepcionais às geociências de petróleo e inovação', 'International recognition for outstanding contributions to petroleum geosciences and innovation')}
             </p>
           </div>
           
@@ -4452,7 +5080,7 @@ const Portfolio: React.FC = () => {
               marginBottom: '16px',
               letterSpacing: '-0.02em'
             }}>
-              Galeria Profissional
+              {t('Galeria Profissional', 'Professional Gallery')}
             </h2>
             <div style={{
               width: '40px',
@@ -4466,7 +5094,7 @@ const Portfolio: React.FC = () => {
               color: '#64748b',
               maxWidth: '600px'
             }}>
-              Momentos importantes da trajetória acadêmica e profissional
+              {t('Momentos importantes da trajetória acadêmica e profissional', 'Important moments from the academic and professional journey')}
             </p>
           </div>
           
@@ -4644,7 +5272,7 @@ const Portfolio: React.FC = () => {
               marginBottom: '16px',
               letterSpacing: '-0.02em'
             }}>
-              Contato Profissional
+              {t('Contato Profissional', 'Professional Contact')}
             </h2>
             <div style={{
               width: '40px',
@@ -4659,7 +5287,7 @@ const Portfolio: React.FC = () => {
               maxWidth: '500px',
               margin: '0 auto'
             }}>
-              Pronto para colaborar no seu próximo projeto de geociências de petróleo
+              {t('Pronto para colaborar no seu próximo projeto de geociências de petróleo', 'Ready to collaborate on your next petroleum geosciences project')}
             </p>
           </div>
           
@@ -4682,15 +5310,15 @@ const Portfolio: React.FC = () => {
                 icon: Phone,
                 title: 'WhatsApp',
                 primary: '+244 933 514 132',
-                secondary: 'Resposta directa · Disponível 24/7',
+                secondary: t('Resposta directa · Disponível 24/7', 'Direct reply · Available 24/7'),
                 color: '#22c55e',
                 href: 'https://wa.me/244933514132'
               },
               {
                 icon: MapPin,
-                title: 'Localização',
-                primary: 'Luanda, Angola · Lisboa, Portugal · Ufa, Rússia',
-                secondary: 'Consultoria internacional disponível',
+                title: t('Localização', 'Location'),
+                primary: t('Luanda, Angola · Lisboa, Portugal · Ufa, Rússia', 'Luanda, Angola · Lisbon, Portugal · Ufa, Russia'),
+                secondary: t('Consultoria internacional disponível', 'International consulting available'),
                 color: '#f87171',
                 href: null
               }
@@ -4767,14 +5395,14 @@ const Portfolio: React.FC = () => {
               fontWeight: '600',
               marginBottom: '8px'
             }}>
-              Disponível para Consultoria Profissional
+              {t('Disponível para Consultoria Profissional', 'Available for Professional Consulting')}
             </h3>
             <p style={{
               fontSize: '14px',
               color: '#cbd5e1',
               marginBottom: '20px'
             }}>
-              Especializado em geociências de petróleo, modelagem de reservatórios e análise de dados baseada em IA
+              {t('Especializado em geociências de petróleo, modelagem de reservatórios e análise de dados baseada em IA', 'Specialized in petroleum geosciences, reservoir modeling and AI-based data analysis')}
             </p>
             <a
               href="https://wa.me/244933514132?text=Ol%C3%A1%20Dr.%20Edmilson%2C%20gostaria%20de%20agendar%20uma%20consultoria."
@@ -4807,7 +5435,7 @@ const Portfolio: React.FC = () => {
                 e.currentTarget.style.boxShadow = '0 8px 24px rgba(34,197,94,0.35)';
               }}
             >
-              <Phone size={16} /> Agendar Consultoria via WhatsApp
+              <Phone size={16} /> {t('Agendar Consultoria via WhatsApp', 'Book Consultation via WhatsApp')}
             </a>
           </div>
         </div>
@@ -4835,23 +5463,351 @@ const Portfolio: React.FC = () => {
               color: 'white',
               marginBottom: '4px'
             }}>
-              Dr. Edmilson Delfim Praia
+              Edmilson Delfim Praia
             </div>
             <div style={{
               fontSize: '13px',
               color: '#64748b'
             }}>
-              Especialista em Geociências de Petróleo & Inovação em IA
+              {t('Especialista em Geociências de Petróleo & Inovação em IA', 'Petroleum Geosciences Specialist & AI Innovator')}
             </div>
           </div>
           <div style={{
             fontSize: '13px',
             color: '#64748b'
           }}>
-            © 2025 Todos os direitos reservados. Portfólio profissional.
+            {t('© 2025 Todos os direitos reservados. Portfólio profissional.', '© 2025 All rights reserved. Professional portfolio.')}
           </div>
         </div>
       </footer>
+
+      {/* === AI Chat Assistant === */}
+      {/* Floating launcher button */}
+      <button
+        onClick={() => setChatOpen(o => !o)}
+        aria-label={chatOpen ? t('Fechar chat', 'Close chat') : t('Abrir chat IA', 'Open AI chat')}
+        style={{
+          position: 'fixed',
+          bottom: isMobile ? '18px' : '28px',
+          right: isMobile ? '18px' : '28px',
+          width: chatOpen ? '52px' : '60px',
+          height: chatOpen ? '52px' : '60px',
+          borderRadius: '50%',
+          border: 'none',
+          background: chatOpen
+            ? 'linear-gradient(135deg, #64748b 0%, #334155 100%)'
+            : 'linear-gradient(135deg, #7c3aed 0%, #2563eb 60%, #0ea5e9 100%)',
+          color: 'white',
+          cursor: 'pointer',
+          boxShadow: chatOpen
+            ? '0 10px 30px rgba(15,23,42,0.4)'
+            : '0 14px 40px rgba(124,58,237,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 2000,
+          transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+        }}
+      >
+        {chatOpen ? <X size={22} /> : <MessageCircle size={26} />}
+        {!chatOpen && (
+          <span style={{
+            position: 'absolute',
+            inset: '-6px',
+            borderRadius: '50%',
+            border: '2px solid rgba(124,58,237,0.4)',
+            animation: 'glowPulse 2.5s ease-out infinite',
+            pointerEvents: 'none'
+          }}></span>
+        )}
+      </button>
+
+      {/* Chat panel */}
+      {chatOpen && (
+        <div style={{
+          position: 'fixed',
+          bottom: isMobile ? '82px' : '100px',
+          right: isMobile ? '12px' : '28px',
+          left: isMobile ? '12px' : 'auto',
+          width: isMobile ? 'auto' : '400px',
+          height: isMobile ? '70vh' : '580px',
+          maxHeight: 'calc(100vh - 140px)',
+          background: 'white',
+          borderRadius: '20px',
+          boxShadow: '0 30px 80px rgba(15,23,42,0.35)',
+          border: '1px solid rgba(0,0,0,0.06)',
+          zIndex: 1999,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          animation: 'fadeInUp 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
+        }}>
+          {/* Header */}
+          <div style={{
+            padding: '18px 20px',
+            background: 'linear-gradient(135deg, #7c3aed 0%, #2563eb 70%, #0ea5e9 100%)',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            flexShrink: 0
+          }}>
+            <div style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.3)'
+            }}>
+              <Sparkles size={20} />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{
+                fontSize: '15px',
+                fontWeight: '700',
+                letterSpacing: '-0.01em',
+                marginBottom: '2px'
+              }}>{UI[siteLang].title}</div>
+              <div style={{
+                fontSize: '11px',
+                opacity: 0.85,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}>
+                <span style={{
+                  width: '6px', height: '6px', borderRadius: '50%',
+                  background: '#22c55e', boxShadow: '0 0 8px #22c55e',
+                  animation: 'pulse 2s infinite'
+                }}></span>
+                {UI[siteLang].subtitle}
+              </div>
+            </div>
+            {/* Language toggle */}
+            <div style={{
+              display: 'inline-flex',
+              background: 'rgba(0,0,0,0.25)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              borderRadius: '8px',
+              padding: '3px',
+              gap: '2px',
+              flexShrink: 0
+            }}>
+              {(['pt', 'en'] as const).map(lg => (
+                <button
+                  key={lg}
+                  onClick={() => setSiteLang(lg)}
+                  aria-label={`Switch to ${lg.toUpperCase()}`}
+                  style={{
+                    padding: '4px 10px',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    background: siteLang === lg ? 'white' : 'transparent',
+                    color: siteLang === lg ? '#7c3aed' : 'rgba(255,255,255,0.85)',
+                    border: 'none',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                    letterSpacing: '0.05em',
+                    transition: 'all 0.2s ease'
+                  }}
+                >{lg.toUpperCase()}</button>
+              ))}
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div style={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: '20px 16px',
+            background: '#f8fafc',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}>
+            {chatMessages.map((m, i) => (
+              <div key={i}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start',
+                  animation: 'fadeInUp 0.3s ease-out'
+                }}>
+                  <div style={{
+                    maxWidth: '85%',
+                    padding: '10px 14px',
+                    borderRadius: m.role === 'user' ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
+                    background: m.role === 'user'
+                      ? 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)'
+                      : 'white',
+                    color: m.role === 'user' ? 'white' : '#0f172a',
+                    fontSize: '13.5px',
+                    lineHeight: '1.55',
+                    boxShadow: m.role === 'user'
+                      ? '0 4px 12px rgba(37,99,235,0.25)'
+                      : '0 2px 6px rgba(0,0,0,0.06)',
+                    border: m.role === 'bot' ? '1px solid #e2e8f0' : 'none',
+                    whiteSpace: 'pre-line'
+                  }}>
+                    {m.text}
+                  </div>
+                </div>
+                {m.role === 'bot' && m.cta && (
+                  <div style={{ marginTop: '10px', paddingLeft: '4px' }}>
+                    <a
+                      href={`https://wa.me/244933514132?text=${encodeURIComponent(UI[siteLang].waMsg)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '10px 16px',
+                        background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                        color: 'white',
+                        fontSize: '12.5px',
+                        fontWeight: '700',
+                        textDecoration: 'none',
+                        borderRadius: '10px',
+                        letterSpacing: '0.03em',
+                        textTransform: 'uppercase',
+                        boxShadow: '0 6px 16px rgba(34,197,94,0.3)',
+                        transition: 'transform 0.2s ease'
+                      }}
+                      onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                    >
+                      <Phone size={14} /> {UI[siteLang].waCta}
+                    </a>
+                  </div>
+                )}
+                {m.role === 'bot' && m.suggests && m.suggests.length > 0 && (
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '6px',
+                    marginTop: '10px',
+                    paddingLeft: '4px'
+                  }}>
+                    {m.suggests.map((s, j) => (
+                      <button
+                        key={j}
+                        onClick={() => sendChatMessage(s)}
+                        style={{
+                          fontSize: '12px',
+                          fontWeight: '600',
+                          padding: '7px 12px',
+                          background: 'white',
+                          color: '#7c3aed',
+                          border: '1px solid rgba(124,58,237,0.3)',
+                          borderRadius: '50px',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.background = '#7c3aed';
+                          e.currentTarget.style.color = 'white';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.background = 'white';
+                          e.currentTarget.style.color = '#7c3aed';
+                        }}
+                      >{s}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {chatTyping && (
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <div style={{
+                  padding: '12px 16px',
+                  borderRadius: '14px 14px 14px 2px',
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  display: 'flex',
+                  gap: '4px'
+                }}>
+                  {[0, 1, 2].map(i => (
+                    <span key={i} style={{
+                      width: '7px',
+                      height: '7px',
+                      borderRadius: '50%',
+                      background: '#7c3aed',
+                      animation: `pulse 1.2s ease-in-out ${i * 0.15}s infinite`
+                    }}></span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Input */}
+          <form
+            onSubmit={(e) => { e.preventDefault(); sendChatMessage(chatInput); }}
+            style={{
+              padding: '12px',
+              background: 'white',
+              borderTop: '1px solid #e2e8f0',
+              display: 'flex',
+              gap: '8px',
+              flexShrink: 0
+            }}
+          >
+            <input
+              type="text"
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              placeholder={UI[siteLang].placeholder}
+              style={{
+                flex: 1,
+                padding: '11px 14px',
+                border: '1px solid #e2e8f0',
+                borderRadius: '10px',
+                fontSize: '13.5px',
+                outline: 'none',
+                fontFamily: 'inherit',
+                transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = '#7c3aed';
+                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.1)';
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = '#e2e8f0';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            />
+            <button
+              type="submit"
+              disabled={!chatInput.trim()}
+              aria-label="Enviar"
+              style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '10px',
+                border: 'none',
+                background: chatInput.trim()
+                  ? 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)'
+                  : '#cbd5e1',
+                color: 'white',
+                cursor: chatInput.trim() ? 'pointer' : 'not-allowed',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s ease',
+                flexShrink: 0
+              }}
+            >
+              <Send size={16} />
+            </button>
+          </form>
+        </div>
+      )}
 
     </div>
   );
