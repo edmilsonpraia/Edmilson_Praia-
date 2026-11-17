@@ -83,7 +83,7 @@ const Portfolio: React.FC = () => {
       id: 'identity',
       keywords: ['quem', 'edmilson', 'praia', 'sobre', 'bio', 'biografia', 'apresenta', 'resumo', 'perfil', 'who', 'about', 'profile'],
       pt: {
-        answer: 'Edmilson Delfim Praia é geocientista-executivo angolano com Doutoramento em Geofísica Aplicada (Ufa, Rússia). Atualmente é Director of Research, Development & Technology na COPIA Group of Companies, Fundador da EDELPHIA (Lisboa) e da Justificações Acadêmicas, e Líder Técnico (Analista de Dados) na WellDesk.',
+        answer: 'Edmilson Delfim Praia é geocientista-executivo angolano com Doutoramento em Geofísica Aplicada (Ufa, Rússia). Atualmente é Director de Pesquisa, Desenvolvimento e Tecnologia na COPIA Group of Companies, S.A., Fundador da EDELPHIA (Lisboa) e da Justificações Acadêmicas, e Líder Técnico (Analista de Dados) na WellDesk.',
         suggests: ['Que produtos lidera?', 'O que é EDELPHIA?', 'Palestras em 2026?']
       },
       en: {
@@ -95,7 +95,7 @@ const Portfolio: React.FC = () => {
       id: 'copia',
       keywords: ['copia', 'group', 'director', 'cargo', 'empresa', 'trabalha', 'posição', 'atual', 'position', 'role', 'current'],
       pt: {
-        answer: 'Na COPIA Group of Companies é Director of Research, Development & Technology. Lidera a agenda de I&D em geociências aplicadas, IA e transformação digital. Responsável pelo desenvolvimento de 3 produtos COPIA (Seis, DynamicSim, Quasar). Signatário do protocolo com a ASGA (Set 2025). Apoia a expansão para a Namíbia.',
+        answer: 'Na COPIA Group of Companies, S.A. é Director de Pesquisa, Desenvolvimento e Tecnologia. Lidera a agenda de I&D em geociências aplicadas, IA e transformação digital. Responsável pelo desenvolvimento de 3 produtos COPIA (Seis, DynamicSim, Quasar). Signatário do protocolo com a ASGA (Set 2025). Apoia a expansão para a Namíbia.',
         suggests: ['Que produtos COPIA?', 'O que é o Quasar?']
       },
       en: {
@@ -908,7 +908,7 @@ const Portfolio: React.FC = () => {
                 textTransform: 'uppercase',
                 backdropFilter: 'blur(10px)'
               }}>
-                {t('Geociências de Petróleo · PhD Track', 'Petroleum Geosciences · PhD Track')}
+                {t('Geociências de Petróleo · Doutoramento', 'Petroleum Geosciences · PhD')}
               </div>
               <div style={{
                 display: 'inline-flex',
@@ -925,7 +925,7 @@ const Portfolio: React.FC = () => {
                 textTransform: 'uppercase',
                 backdropFilter: 'blur(10px)'
               }}>
-                <Building size={13} /> COPIA Group · Director R&D&T
+                <Building size={13} /> COPIA Group of Companies, S.A. · {t('Director de Pesquisa, Desenvolvimento e Tecnologia', 'Director of Research, Development & Technology')}
               </div>
             </div>
 
@@ -1205,9 +1205,9 @@ const Portfolio: React.FC = () => {
               margin: 0
             }}>
               {siteLang === 'pt' ? (
-                <>Geocientista-executivo angolano. <strong style={{ color: '#0f172a' }}>Director of R&D & Technology</strong> na COPIA Group of Companies, <strong style={{ color: '#0f172a' }}>Fundador</strong> da EDELPHIA (Lisboa) e da Justificações Acadêmicas. Doutoramento em Geofísica Aplicada, autor de 3 artigos COPIA Seis em 2026 e speaker em <strong style={{ color: '#1e40af' }}>10 fóruns continentais</strong> este ano.</>
+                <>Geocientista-executivo angolano. <strong style={{ color: '#0f172a' }}>Director de Pesquisa, Desenvolvimento e Tecnologia</strong> na COPIA Group of Companies, S.A., <strong style={{ color: '#0f172a' }}>Fundador</strong> da EDELPHIA (Lisboa) e da Justificações Acadêmicas. Doutoramento em Geofísica Aplicada, autor de 3 artigos COPIA Seis em 2026 e speaker em <strong style={{ color: '#1e40af' }}>10 fóruns continentais</strong> este ano.</>
               ) : (
-                <>Angolan geoscientist-executive. <strong style={{ color: '#0f172a' }}>Director of R&D & Technology</strong> at COPIA Group of Companies, <strong style={{ color: '#0f172a' }}>Founder</strong> of EDELPHIA (Lisbon) and Justificações Acadêmicas. PhD in Applied Geophysics, author of 3 COPIA Seis papers in 2026 and speaker at <strong style={{ color: '#1e40af' }}>10 African stages</strong> this year.</>
+                <>Angolan geoscientist-executive. <strong style={{ color: '#0f172a' }}>Director of Research, Development & Technology</strong> at COPIA Group of Companies, S.A., <strong style={{ color: '#0f172a' }}>Founder</strong> of EDELPHIA (Lisbon) and Justificações Acadêmicas. PhD in Applied Geophysics, author of 3 COPIA Seis papers in 2026 and speaker at <strong style={{ color: '#1e40af' }}>10 African stages</strong> this year.</>
               )}
             </p>
           </div>
@@ -1220,7 +1220,7 @@ const Portfolio: React.FC = () => {
             marginBottom: isMobile ? '24px' : '32px'
           }}>
             {[
-              { icon: Building, label: t('Posição', 'Position'), value: t('Director R&D · COPIA', 'Director R&D · COPIA'), color: '#7c3aed' },
+              { icon: Building, label: t('Posição', 'Position'), value: t('Director de Pesquisa & Tecnologia · COPIA', 'Director of R&D & Technology · COPIA'), color: '#7c3aed' },
               { icon: GraduationCap, label: t('Formação', 'Education'), value: t('Doutoramento · Geofísica', 'PhD · Geophysics'), color: '#1e40af' },
               { icon: Globe, label: t('Base', 'Base'), value: t('Luanda · Lisboa · Ufa', 'Luanda · Lisbon · Ufa'), color: '#059669' },
               { icon: Award, label: t('Palcos 2026', '2026 Stages'), value: t('10 fóruns africanos', '10 African forums'), color: '#dc2626' }
@@ -1343,8 +1343,8 @@ const Portfolio: React.FC = () => {
           }}>
             {[
               {
-                title: 'Director of R&D & Technology',
-                company: 'COPIA Group of Companies',
+                title: t('Director de Pesquisa, Desenvolvimento e Tecnologia', 'Director of Research, Development & Technology'),
+                company: 'COPIA Group of Companies, S.A.',
                 period: t('Atual', 'Current'),
                 type: t('Executivo · I&D', 'Executive · R&D'),
                 icon: Building,
