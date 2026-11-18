@@ -11,7 +11,7 @@ const Portfolio: React.FC = () => {
 
   // === AI Chat Assistant state ===
   type Lang = 'pt' | 'en';
-  type ChatMsg = { role: 'user' | 'bot'; text: string; suggests?: string[]; cta?: boolean };
+  type ChatMsg = { role: 'user' | 'bot'; text: string; suggests?: string[]; cta?: boolean; section?: string; sectionLabel?: string };
   const [siteLang, setSiteLang] = useState<Lang>('pt');
 
   // Bilingual helper — pass PT + EN strings inline
@@ -64,6 +64,8 @@ const Portfolio: React.FC = () => {
     pt: { answer: string; suggests?: string[] };
     en: { answer: string; suggests?: string[] };
     cta?: boolean;
+    section?: string;      // DOM id to scroll to
+    sectionLabel?: { pt: string; en: string }; // label on the "Go to section" button
   };
   const KBx: KBEntry[] = [
     {
@@ -77,19 +79,23 @@ const Portfolio: React.FC = () => {
         answer: 'Happy to help you book a consultation with Edmilson. To help him prepare, please tell me:\n\n1️⃣ What is your area of interest? (seismic interpretation, reservoir modeling, training, AI in O&G, other)\n2️⃣ Is it for a company or individual?\n3️⃣ What is your timeline? (urgent, within 30 days, flexible)\n\nYou can answer here or tap the button below to talk to Edmilson directly on WhatsApp.',
         suggests: ['Seismic interpretation', 'Reservoir modeling', 'Professional training', 'AI in O&G']
       },
-      cta: true
+      cta: true,
+      section: 'contact',
+      sectionLabel: { pt: 'Ir para Contato', en: 'Go to Contact' }
     },
     {
       id: 'identity',
       keywords: ['quem', 'edmilson', 'praia', 'sobre', 'bio', 'biografia', 'apresenta', 'resumo', 'perfil', 'who', 'about', 'profile'],
       pt: {
-        answer: 'Edmilson Delfim Praia é geocientista-executivo angolano com Doutoramento em Geofísica Aplicada (Ufa, Rússia). Atualmente é Director de Pesquisa, Desenvolvimento e Tecnologia na COPIA Group of Companies, S.A., Fundador da EDELPHIA (Lisboa) e da Justificações Acadêmicas, e Líder Técnico (Analista de Dados) na WellDesk.',
+        answer: 'Edmilson Delfim Praia é geocientista-executivo angolano com Doutoramento em Geofísica Aplicada (Ufa, Rússia). Atualmente é Director de Pesquisa, Desenvolvimento e Tecnologia na COPIA Group of Companies, S.A., Fundador da EDELPHIA (Angola) e da Justificações Acadêmicas, e Líder Técnico (Analista de Dados) na WellDesk.',
         suggests: ['Que produtos lidera?', 'O que é EDELPHIA?', 'Palestras em 2026?']
       },
       en: {
-        answer: 'Edmilson Delfim Praia is an Angolan geoscientist-executive with a PhD in Applied Geophysics (Ufa, Russia). He is currently Director of Research, Development & Technology at COPIA Group of Companies, Founder of EDELPHIA (Lisbon) and Justificações Acadêmicas, and Technical Lead (Data Analyst) at WellDesk.',
+        answer: 'Edmilson Delfim Praia is an Angolan geoscientist-executive with a PhD in Applied Geophysics (Ufa, Russia). He is currently Director of Research, Development & Technology at COPIA Group of Companies, S.A., Founder of EDELPHIA (Angola) and Justificações Acadêmicas, and Technical Lead (Data Analyst) at WellDesk.',
         suggests: ['What products does he lead?', 'What is EDELPHIA?', '2026 talks?']
-      }
+      },
+      section: 'about',
+      sectionLabel: { pt: 'Ver secção Perfil', en: 'View Profile section' }
     },
     {
       id: 'copia',
@@ -101,7 +107,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'At COPIA Group of Companies he is Director of Research, Development & Technology. He leads the R&D agenda in applied geosciences, AI and digital transformation. Responsible for the development of 3 COPIA products (Seis, DynamicSim, Quasar). Signatory of the ASGA protocol (Sep 2025). Supports expansion to Namibia.',
         suggests: ['Which COPIA products?', 'What is Quasar?']
-      }
+      },
+      section: 'experience',
+      sectionLabel: { pt: 'Ver na Experiência', en: 'View in Experience' }
     },
     {
       id: 'copia-products',
@@ -113,7 +121,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'Edmilson leads 3 COPIA products: (1) COPIA Seis — AI-powered seismic interpretation platform (Geobody Probe, Seismic Horizons, ML). (2) COPIA DynamicSim — dynamic reservoir modeling, in Portuguese and paid in kwanzas. (3) COPIA Quasar — critical infrastructure analysis, publicly launched at MINEA 2026.',
         suggests: ['Tell me about COPIA Seis', 'Tell me about Quasar', 'Book consultation']
-      }
+      },
+      section: 'products',
+      sectionLabel: { pt: 'Ver Produtos', en: 'View Products' }
     },
     {
       id: 'copia-seis',
@@ -125,7 +135,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'COPIA Seis is a proprietary AI-assisted seismic interpretation platform. Includes Geobody Probe, Seismic Horizons and Machine Learning. Developed under Edmilson\'s direct leadership, with research articles published in 2026.',
         suggests: ['Any papers on Seis?', 'Book consultation']
-      }
+      },
+      section: 'products',
+      sectionLabel: { pt: 'Ver Produtos', en: 'View Products' }
     },
     {
       id: 'copia-dynamicsim',
@@ -137,7 +149,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'COPIA DynamicSim is a 100% national dynamic reservoir simulator. Portuguese interface, payment in kwanzas — competitive alternative to international software. Publicly demonstrated at AGLNG 2026 in Maputo with Peng-Robinson PVT analysis, Arps decline and LSTM forecasting.',
         suggests: ['Tell me about AGLNG', 'Book consultation']
-      }
+      },
+      section: 'products',
+      sectionLabel: { pt: 'Ver Produtos', en: 'View Products' }
     },
     {
       id: 'copia-quasar',
@@ -149,19 +163,23 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'COPIA Quasar is software for national critical infrastructure analysis. Publicly launched by Edmilson at MINEA 2026 (Luanda, May 28-29) in the talk "Technological Sovereignty in Critical Infrastructure Analysis Using QUASAR Software", organized by Angola\'s Ministry of Energy and Water.',
         suggests: ['Tell me about MINEA 2026']
-      }
+      },
+      section: 'minea-featured',
+      sectionLabel: { pt: 'Ver MINEA 2026', en: 'View MINEA 2026' }
     },
     {
       id: 'edelphia',
       keywords: ['edelphia', 'lisboa', 'portugal', 'lisbon', 'data science', 'algoritmo', 'algoritmos', 'algorithms', 'knowledge', 'phi'],
       pt: {
-        answer: 'EDELPHIA é a empresa fundada pelo Edmilson em Lisboa, Portugal. Assinatura: "Science · Algorithms · Intelligence". Framework em 4 pilares: estimação estatística, minimização de risco em ML, inferência causal e acumulação contínua de conhecimento. Equação central: Φ = ∫ knowledge · dt. Site oficial: edelphia.vercel.app',
+        answer: 'EDELPHIA é a empresa fundada pelo Edmilson em Angola. Assinatura: "Science · Algorithms · Intelligence". Framework em 4 pilares: estimação estatística, minimização de risco em ML, inferência causal e acumulação contínua de conhecimento. Equação central: Φ = ∫ knowledge · dt. Site oficial: edelphia.vercel.app',
         suggests: ['Que outras empresas?']
       },
       en: {
-        answer: 'EDELPHIA is the company Edmilson founded in Lisbon, Portugal. Signature: "Science · Algorithms · Intelligence". Framework in 4 pillars: statistical estimation, ML risk minimization, causal inference and continuous knowledge accumulation. Core equation: Φ = ∫ knowledge · dt. Official site: edelphia.vercel.app',
+        answer: 'EDELPHIA is the company Edmilson founded in Angola. Signature: "Science · Algorithms · Intelligence". Framework in 4 pillars: statistical estimation, ML risk minimization, causal inference and continuous knowledge accumulation. Core equation: Φ = ∫ knowledge · dt. Official site: edelphia.vercel.app',
         suggests: ['What other companies?']
-      }
+      },
+      section: 'experience',
+      sectionLabel: { pt: 'Ver na Experiência', en: 'View in Experience' }
     },
     {
       id: 'justificacoes',
@@ -173,7 +191,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'Justificações Acadêmicas is the company Edmilson founded in 2020, specialized in senior professional training. Serves professionals from major oil companies: Sonangol, Chevron, ANPG. Delivers advanced training to senior technical staff (UAN, UCAN, ISPTEC) — focused on professionals, not students. International consulting for Brazil, Libya and Mozambique. Site: justificacoesacademicas.org',
         suggests: ['Book training']
-      }
+      },
+      section: 'experience',
+      sectionLabel: { pt: 'Ver na Experiência', en: 'View in Experience' }
     },
     {
       id: 'welldesk',
@@ -185,7 +205,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'At WellDesk, Edmilson is Data Analyst and Technical Lead. Developed the Well Log Web Pro platform, integrating AI with interactive visualization for analysis, imputation and prediction of petrophysical data. Uses Python, Petrel and ECLIPSE in geological modeling projects.',
         suggests: ['How does Well Log Web Pro work?']
-      }
+      },
+      section: 'experience',
+      sectionLabel: { pt: 'Ver na Experiência', en: 'View in Experience' }
     },
     {
       id: 'education',
@@ -197,7 +219,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'Edmilson holds a PhD in Applied Geophysics from the Russian University of Petroleum (Ufa). Specialist in applied geology for oil and gas, with strong foundation in data science and AI.',
         suggests: ['What languages?']
-      }
+      },
+      section: 'education',
+      sectionLabel: { pt: 'Ver Formação', en: 'View Education' }
     },
     {
       id: 'languages',
@@ -215,7 +239,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'In 2026, Edmilson spoke at 10 African continental stages: NIEC (Namibia, Apr), MINEA (Luanda, May), AIMCT (Luanda, Jul), NOGC (Namibia, Aug), Capital Humano (Luanda, Aug), AOG (Luanda, Sep), AHTLS (Talatona, Sep), AEW (Cape Town, Oct), Huawei Masterclass (Luanda), AGLNG (Maputo, Nov).',
         suggests: ['Tell me about AGLNG', 'Tell me about AOG', 'Tell me about AEW']
-      }
+      },
+      section: 'speaking',
+      sectionLabel: { pt: 'Ver Palestras', en: 'View Talks' }
     },
     {
       id: 'aglng',
@@ -227,7 +253,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'AGLNG 2026 — Africa Gas & LNG Summit (Maputo, Nov 11-13). Edmilson represented COPIA in Session 3.1 "Preparing Africa\'s Workforce for Gas and LNG Projects". Technical demo of COPIA DynamicSim. Sponsored by H.E. Daniel Chapo, President of Mozambique, with ENH, INP, Sasol, ExxonMobil, TotalEnergies.',
         suggests: ['Other events?']
-      }
+      },
+      section: 'aglng-featured',
+      sectionLabel: { pt: 'Ver AGLNG Maputo', en: 'View AGLNG Maputo' }
     },
     {
       id: 'aog',
@@ -239,7 +267,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'AOG 2026 — Angola Oil & Gas (Luanda, Sep 8-10). Edmilson had 3 participations: (1) panel on main stage with senior executives; (2) pre-conference technical keynote "Reconstruction of Missing RHOB and NPHI Well Logs Using Machine Learning" powered by COPIA; (3) VIP Breakfast where he spoke about COPIA software alongside the Angolan Secretary of State.',
         suggests: ['Other events in Angola?']
-      }
+      },
+      section: 'aog-featured',
+      sectionLabel: { pt: 'Ver AOG Luanda', en: 'View AOG Luanda' }
     },
     {
       id: 'aew',
@@ -251,7 +281,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'AEW 2026 — African Energy Week (Cape Town, Oct 12). Edmilson as Speaker + Chairperson: (1) official talk "Building Africa\'s Subsurface Intelligence Through AI-Driven Seismic Interpretation" (Room 2.4B, 10:00); (2) chair at the COPIA Group Exhibition Hall Tech Stage.',
         suggests: ['Tell me about AGLNG']
-      }
+      },
+      section: 'aew-featured',
+      sectionLabel: { pt: 'Ver AEW Cape Town', en: 'View AEW Cape Town' }
     },
     {
       id: 'niec',
@@ -263,7 +295,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'NIEC 2026 — Namibia International Energy Conference (Windhoek, Apr 14, Venue 3, 15:15). Talk "Digital Transformation in Reservoir Engineering: Using AI for Integrated Seismic Interpretation and Dynamic Simulation" representing COPIA before Namibian authorities.',
         suggests: ['Tell me about NOGC']
-      }
+      },
+      section: 'niec-featured',
+      sectionLabel: { pt: 'Ver NIEC Windhoek', en: 'View NIEC Windhoek' }
     },
     {
       id: 'minea',
@@ -275,7 +309,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'MINEA 2026 — 2nd International Conference on Energy and Water (Luanda HCTA, May 28-29). Speaker + Platinum Sponsor (COPIA). Publicly launched the COPIA Quasar product in the talk "Technological Sovereignty in Critical Infrastructure Analysis Using QUASAR Software". Organized by the Government of Angola.',
         suggests: ['Tell me about Quasar']
-      }
+      },
+      section: 'minea-featured',
+      sectionLabel: { pt: 'Ver MINEA 2026', en: 'View MINEA 2026' }
     },
     {
       id: 'aimct',
@@ -287,7 +323,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'AIMCT Angola 2026 — Asset Integrity, Maintenance, Corrosion & Turnaround Conference (HCTA Luanda, Jul 14). Edmilson was official speaker, awarded Certificate of Appreciation by Cogent Solutions. Theme: aging offshore asset integrity, corrosion management, engineering resilience.',
         suggests: ['Other recognitions?']
-      }
+      },
+      section: 'aimct-featured',
+      sectionLabel: { pt: 'Ver AIMCT Angola', en: 'View AIMCT Angola' }
     },
     {
       id: 'huawei',
@@ -299,7 +337,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'COPIA Masterclass at the Huawei Luanda Innovation Center. Edmilson led technical training on AI, ML and Deep Learning applied to O&G — taxonomy (ANI/AGI/ASI, supervised/unsupervised/reinforcement) and practical implementation (Random Forest, XGBoost, ANN, CNN, kMeans, LSTM). Packed Huawei auditorium.',
         suggests: ['Other events?']
-      }
+      },
+      section: 'huawei-featured',
+      sectionLabel: { pt: 'Ver Huawei Masterclass', en: 'View Huawei Masterclass' }
     },
     {
       id: 'capital-humano',
@@ -311,7 +351,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'National Conference on Human Capital and the Development of Angola (Luanda, Aug 29, 2026). Organized by the Government of Angola via UTG/PNFQ as part of the 50-years-of-Independence celebrations. Edmilson participated representing the new Angolan generation of executives in science and technology.',
         suggests: ['Other events in Angola?']
-      }
+      },
+      section: 'ch-featured',
+      sectionLabel: { pt: 'Ver Capital Humano', en: 'View Capital Humano' }
     },
     {
       id: 'publications',
@@ -323,7 +365,9 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'Edmilson published 3 flagship COPIA Seis papers in 2026: (1) "1.4 m of Certainty — False Precision in Test-Based Oil-Water Contact Windows" (Nov); (2) "See Before You Pick — Volume Rendering as a Trackability Map" (Nov); (3) "99.9% Locally Right — And Why That Is Not Enough" (Oct). Plus 6 earlier publications in OILFIELD ENGINEERING and WellDesk (2024).',
         suggests: ['What is the "99.9%" paper about?']
-      }
+      },
+      section: 'publications',
+      sectionLabel: { pt: 'Ver Publicações', en: 'View Publications' }
     },
     {
       id: 'awards',
@@ -335,20 +379,24 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'Edmilson received the Honor Medal from the Angolan Embassy in Russia (Aug 2025, Oval Hall). Also 2nd place at the Ufa University Young Scientists Conference (2024) for the WellLog Pro software with ML. Certificate of Appreciation at AIMCT Angola 2026.',
         suggests: ['Any other events?']
-      }
+      },
+      section: 'awards',
+      sectionLabel: { pt: 'Ver Reconhecimentos', en: 'View Awards' }
     },
     {
       id: 'contact',
       keywords: ['contacto', 'contato', 'contact', 'email', 'whatsapp', 'telefone', 'phone'],
       pt: {
-        answer: 'Podes contactar o Edmilson directamente:\n• WhatsApp: +244 933 514 132 (resposta directa 24/7)\n• Email: praiae180@gmail.com\n• Localizações: Luanda · Lisboa · Ufa',
+        answer: 'Podes contactar o Edmilson directamente:\n• WhatsApp: +244 933 514 132 (resposta directa 24/7)\n• Email: praiae180@gmail.com\n• Base principal: Luanda, Angola · formado em Ufa, Rússia',
         suggests: ['Agendar consultoria']
       },
       en: {
-        answer: 'You can reach Edmilson directly:\n• WhatsApp: +244 933 514 132 (direct reply 24/7)\n• Email: praiae180@gmail.com\n• Locations: Luanda · Lisbon · Ufa',
+        answer: 'You can reach Edmilson directly:\n• WhatsApp: +244 933 514 132 (direct reply 24/7)\n• Email: praiae180@gmail.com\n• Main base: Luanda, Angola · studied in Ufa, Russia',
         suggests: ['Book consultation']
       },
-      cta: true
+      cta: true,
+      section: 'contact',
+      sectionLabel: { pt: 'Ir para Contato', en: 'Go to Contact' }
     },
     {
       id: 'competencies',
@@ -360,10 +408,20 @@ const Portfolio: React.FC = () => {
       en: {
         answer: 'Main competencies: Machine Learning & AI, Seismic Interpretation, Reservoir Modeling, Petrophysical Analysis, Causal Inference. Tools: Python, Petrel, ECLIPSE. Senior professional training.',
         suggests: ['Which COPIA products?', 'Book consultation']
-      }
+      },
+      section: 'about',
+      sectionLabel: { pt: 'Ver Competências', en: 'View Competencies' }
     }
   ];
-  const KB = KBx.map(e => ({ id: e.id, keywords: e.keywords, answer: e[siteLang].answer, suggests: e[siteLang].suggests, cta: e.cta })) as unknown as Array<{ id: string; keywords: string[]; answer: string; suggests?: string[]; cta?: boolean }>;
+  const KB = KBx.map(e => ({
+    id: e.id,
+    keywords: e.keywords,
+    answer: e[siteLang].answer,
+    suggests: e[siteLang].suggests,
+    cta: e.cta,
+    section: e.section,
+    sectionLabel: e.sectionLabel ? e.sectionLabel[siteLang] : undefined
+  })) as unknown as Array<{ id: string; keywords: string[]; answer: string; suggests?: string[]; cta?: boolean; section?: string; sectionLabel?: string }>;
 
 
   const normalize = (s: string): string =>
@@ -392,7 +450,14 @@ const Portfolio: React.FC = () => {
       if (score > best.score) best = { score, entry };
     }
     if (best.entry && best.score >= 1) {
-      return { role: 'bot', text: best.entry.answer, suggests: best.entry.suggests, cta: best.entry.cta };
+      return {
+        role: 'bot',
+        text: best.entry.answer,
+        suggests: best.entry.suggests,
+        cta: best.entry.cta,
+        section: best.entry.section,
+        sectionLabel: best.entry.sectionLabel
+      };
     }
     return { role: 'bot', text: t.fallback, suggests: [...t.fallbackSuggests], cta: true };
   };
@@ -1084,7 +1149,7 @@ const Portfolio: React.FC = () => {
                 backdropFilter: isMobile ? 'blur(10px)' : 'none'
               }}>
                 <MapPin size={16} />
-                {t('Luanda · Lisboa · Ufa', 'Luanda · Lisbon · Ufa')}
+                {t('Luanda, Angola · Ufa, Rússia', 'Luanda, Angola · Ufa, Russia')}
               </div>
             </div>
           </div>
@@ -1205,9 +1270,9 @@ const Portfolio: React.FC = () => {
               margin: 0
             }}>
               {siteLang === 'pt' ? (
-                <>Geocientista-executivo angolano. <strong style={{ color: '#0f172a' }}>Director de Pesquisa, Desenvolvimento e Tecnologia</strong> na COPIA Group of Companies, S.A., <strong style={{ color: '#0f172a' }}>Fundador</strong> da EDELPHIA (Lisboa) e da Justificações Acadêmicas. Doutoramento em Geofísica Aplicada, autor de 3 artigos COPIA Seis em 2026 e speaker em <strong style={{ color: '#1e40af' }}>10 fóruns continentais</strong> este ano.</>
+                <>Geocientista-executivo angolano. <strong style={{ color: '#0f172a' }}>Director de Pesquisa, Desenvolvimento e Tecnologia</strong> na COPIA Group of Companies, S.A., <strong style={{ color: '#0f172a' }}>Fundador</strong> da EDELPHIA (Angola) e da Justificações Acadêmicas. Doutoramento em Geofísica Aplicada, autor de 3 artigos COPIA Seis em 2026 e speaker em <strong style={{ color: '#1e40af' }}>10 fóruns continentais</strong> este ano.</>
               ) : (
-                <>Angolan geoscientist-executive. <strong style={{ color: '#0f172a' }}>Director of Research, Development & Technology</strong> at COPIA Group of Companies, S.A., <strong style={{ color: '#0f172a' }}>Founder</strong> of EDELPHIA (Lisbon) and Justificações Acadêmicas. PhD in Applied Geophysics, author of 3 COPIA Seis papers in 2026 and speaker at <strong style={{ color: '#1e40af' }}>10 African stages</strong> this year.</>
+                <>Angolan geoscientist-executive. <strong style={{ color: '#0f172a' }}>Director of Research, Development & Technology</strong> at COPIA Group of Companies, S.A., <strong style={{ color: '#0f172a' }}>Founder</strong> of EDELPHIA (Angola) and Justificações Acadêmicas. PhD in Applied Geophysics, author of 3 COPIA Seis papers in 2026 and speaker at <strong style={{ color: '#1e40af' }}>10 African stages</strong> this year.</>
               )}
             </p>
           </div>
@@ -1222,7 +1287,7 @@ const Portfolio: React.FC = () => {
             {[
               { icon: Building, label: t('Posição', 'Position'), value: t('Director de Pesquisa & Tecnologia · COPIA', 'Director of R&D & Technology · COPIA'), color: '#7c3aed' },
               { icon: GraduationCap, label: t('Formação', 'Education'), value: t('Doutoramento · Geofísica', 'PhD · Geophysics'), color: '#1e40af' },
-              { icon: Globe, label: t('Base', 'Base'), value: t('Luanda · Lisboa · Ufa', 'Luanda · Lisbon · Ufa'), color: '#059669' },
+              { icon: Globe, label: t('Base', 'Base'), value: t('Luanda, Angola · Ufa, Rússia', 'Luanda, Angola · Ufa, Russia'), color: '#059669' },
               { icon: Award, label: t('Palcos 2026', '2026 Stages'), value: t('10 fóruns africanos', '10 African forums'), color: '#dc2626' }
             ].map((stat, i) => (
               <div key={i} style={{
@@ -1369,7 +1434,7 @@ const Portfolio: React.FC = () => {
               {
                 title: t('Fundador', 'Founder'),
                 company: 'EDELPHIA',
-                period: t('Atual · Lisboa', 'Current · Lisbon'),
+                period: t('Atual · Angola', 'Current · Angola'),
                 type: 'Founder',
                 icon: Star,
                 color: '#0ea5e9',
@@ -1377,17 +1442,17 @@ const Portfolio: React.FC = () => {
                   'Data science e algoritmos — Φ = ∫ knowledge · dt.',
                   'Data science and algorithms — Φ = ∫ knowledge · dt.'
                 ),
-                chips: [t('Lisboa', 'Lisbon'), 'ML', t('Inferência causal', 'Causal inference'), t('Fundador', 'Founder')],
+                chips: [t('Angola', 'Angola'), 'ML', t('Inferência causal', 'Causal inference'), t('Fundador', 'Founder')],
                 achievements: siteLang === 'pt' ? [
                   'Fundei a EDELPHIA — empresa de data science e algoritmos sob a assinatura "Science · Algorithms · Intelligence"',
                   'Framework baseado em quatro pilares: precisão em estimação estatística, minimização de risco em machine learning, análise de inferência causal e acumulação contínua de conhecimento',
                   'Equação central Φ = ∫ knowledge · dt — modelo matemático que orienta a cultura e o método da empresa',
-                  'Sede em Lisboa (38.7223° N · 9.1393° W) · site oficial em edelphia.vercel.app'
+                  'Sediada em Angola · site oficial em edelphia.vercel.app'
                 ] : [
                   'Founded EDELPHIA — a data science and algorithms company under the signature "Science · Algorithms · Intelligence"',
                   'Framework based on four pillars: statistical estimation accuracy, machine learning risk minimization, causal inference analysis and continuous knowledge accumulation',
                   'Core equation Φ = ∫ knowledge · dt — mathematical model guiding the company\'s culture and method',
-                  'Headquartered in Lisbon (38.7223° N · 9.1393° W) · official site at edelphia.vercel.app'
+                  'Based in Angola · official site at edelphia.vercel.app'
                 ]
               },
               {
@@ -5317,7 +5382,7 @@ const Portfolio: React.FC = () => {
               {
                 icon: MapPin,
                 title: t('Localização', 'Location'),
-                primary: t('Luanda, Angola · Lisboa, Portugal · Ufa, Rússia', 'Luanda, Angola · Lisbon, Portugal · Ufa, Russia'),
+                primary: t('Luanda, Angola · Ufa, Rússia', 'Luanda, Angola · Ufa, Russia'),
                 secondary: t('Consultoria internacional disponível', 'International consulting available'),
                 color: '#f87171',
                 href: null
@@ -5655,6 +5720,37 @@ const Portfolio: React.FC = () => {
                     {m.text}
                   </div>
                 </div>
+                {m.role === 'bot' && m.section && (
+                  <div style={{ marginTop: '10px', paddingLeft: '4px' }}>
+                    <button
+                      onClick={() => {
+                        setChatOpen(false);
+                        setTimeout(() => scrollToSection(m.section!), 200);
+                      }}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '10px 16px',
+                        background: 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)',
+                        color: 'white',
+                        fontSize: '12.5px',
+                        fontWeight: '700',
+                        border: 'none',
+                        borderRadius: '10px',
+                        letterSpacing: '0.03em',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer',
+                        boxShadow: '0 6px 16px rgba(124,58,237,0.3)',
+                        transition: 'transform 0.2s ease'
+                      }}
+                      onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                    >
+                      {m.sectionLabel || t('Ver secção', 'View section')} →
+                    </button>
+                  </div>
+                )}
                 {m.role === 'bot' && m.cta && (
                   <div style={{ marginTop: '10px', paddingLeft: '4px' }}>
                     <a
