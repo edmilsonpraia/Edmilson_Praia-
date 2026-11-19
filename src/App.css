@@ -201,18 +201,8 @@ a:focus {
 }
 
 /* Responsividade */
-@media (max-width: 768px) {
-  nav div div:last-child {
-    display: none !important;
-  }
-}
-
 @media (max-width: 640px) {
   nav {
     padding: 8px 0 !important;
-  }
-  
-  nav div {
-    padding: 0 8px !important;
   }
 }
