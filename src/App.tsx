@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Mail, Phone, MapPin, Award, BookOpen, Code, Globe, Star, Download, Calendar, Building, GraduationCap, FileText, Menu, X, MessageCircle, Send, User, Home, Briefcase, Mic, Camera, Sparkles } from 'lucide-react';
+import { ChevronDown, Mail, Phone, MapPin, Award, BookOpen, Code, Globe, Star, Download, Calendar, Building, GraduationCap, FileText, Menu, X, MessageCircle, Send, User, Home, Briefcase, Mic, Camera, Sparkles, Eye, Users } from 'lucide-react';
 import './App.css';
 
 const Portfolio: React.FC = () => {
@@ -491,6 +491,34 @@ const Portfolio: React.FC = () => {
       try { sessionStorage.setItem('chatGreeted', '1'); } catch { /* ignore */ }
     }, 2500);
     return () => clearTimeout(t);
+  }, [isLoading]);
+
+  // === Visitor + View counters (Abacus free API, no key needed) ===
+  const [visits, setVisits] = useState<number | null>(null);
+  const [views, setViews] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (isLoading) return;
+    const ns = 'edmilson-praia-portfolio';
+    // Views: every page load increments
+    fetch(`https://abacus.jasoncameron.dev/hit/${ns}/views`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d && typeof d.value === 'number') setViews(d.value); })
+      .catch(() => {});
+    // Visits: once per session
+    try {
+      const already = sessionStorage.getItem('siteVisited') === '1';
+      const url = already
+        ? `https://abacus.jasoncameron.dev/get/${ns}/visits`
+        : `https://abacus.jasoncameron.dev/hit/${ns}/visits`;
+      fetch(url)
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+          if (d && typeof d.value === 'number') setVisits(d.value);
+          if (!already) sessionStorage.setItem('siteVisited', '1');
+        })
+        .catch(() => {});
+    } catch { /* ignore */ }
   }, [isLoading]);
 
   useEffect(() => {
@@ -5537,6 +5565,53 @@ const Portfolio: React.FC = () => {
               {t('Especialista em Geociências de Petróleo & Inovação em IA', 'Petroleum Geosciences Specialist & AI Innovator')}
             </div>
           </div>
+
+          {/* Visitor counters */}
+          {(visits !== null || views !== null) && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '18px',
+              flexWrap: 'wrap',
+              padding: '10px 18px',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: '50px'
+            }}>
+              {visits !== null && (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '12px',
+                  color: '#cbd5e1',
+                  fontWeight: '500'
+                }}>
+                  <Users size={14} style={{ color: '#60a5fa' }} />
+                  <span style={{ color: 'white', fontWeight: '700' }}>{visits.toLocaleString(siteLang === 'pt' ? 'pt-PT' : 'en-US')}</span>
+                  {t('visitas', 'visitors')}
+                </div>
+              )}
+              {visits !== null && views !== null && (
+                <div style={{ width: '1px', height: '14px', background: 'rgba(255,255,255,0.15)' }}></div>
+              )}
+              {views !== null && (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '12px',
+                  color: '#cbd5e1',
+                  fontWeight: '500'
+                }}>
+                  <Eye size={14} style={{ color: '#22c55e' }} />
+                  <span style={{ color: 'white', fontWeight: '700' }}>{views.toLocaleString(siteLang === 'pt' ? 'pt-PT' : 'en-US')}</span>
+                  {t('visualizações', 'views')}
+                </div>
+              )}
+            </div>
+          )}
+
           <div style={{
             fontSize: '13px',
             color: '#64748b'
