@@ -37,15 +37,6 @@
       ]
     }
   ],
-  "rewrites": [
-    { "source": "/sobre", "destination": "/index.html" },
-    { "source": "/experiencia", "destination": "/index.html" },
-    { "source": "/palestras", "destination": "/index.html" },
-    { "source": "/produtos", "destination": "/index.html" },
-    { "source": "/formacao", "destination": "/index.html" },
-    { "source": "/publicacoes", "destination": "/index.html" },
-    { "source": "/reconhecimentos", "destination": "/index.html" },
-    { "source": "/galeria", "destination": "/index.html" },
-    { "source": "/contato", "destination": "/index.html" }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 }
