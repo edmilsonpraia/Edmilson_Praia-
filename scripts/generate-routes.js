@@ -17,6 +17,57 @@ const BUILD_DIR = path.resolve(__dirname, '..', 'build');
 const BASE_HTML_PATH = path.join(BUILD_DIR, 'index.html');
 
 // Must mirror ROUTE_MAP in src/App.tsx
+// Static footer-nav block injected after <div id="root"> in EVERY page.
+// Visible to any crawler (ignores noscript stripping) and to users as a
+// semantic footer-style sitemap. Safe for React hydration because it
+// lives OUTSIDE #root, so React never touches it.
+const STATIC_FOOTER_NAV = `
+<footer class="static-sitemap" aria-label="Mapa do site e conferências" style="padding:48px 20px 32px;background:#0f172a;color:#cbd5e1;font-family:-apple-system,system-ui,sans-serif;font-size:13px;line-height:1.6;border-top:1px solid #1e293b;">
+<div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px;">
+<nav aria-label="Secções do site">
+<h3 style="color:#fff;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 12px;">Secções</h3>
+<ul style="list-style:none;padding:0;margin:0;">
+<li><a href="/" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Início</a></li>
+<li><a href="/sobre" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Perfil</a></li>
+<li><a href="/experiencia" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Experiência</a></li>
+<li><a href="/palestras" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Palestras &amp; Conferências 2026</a></li>
+<li><a href="/produtos" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Produtos &amp; Tecnologias</a></li>
+<li><a href="/formacao" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Formação Académica</a></li>
+<li><a href="/publicacoes" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Publicações &amp; Pesquisa</a></li>
+<li><a href="/reconhecimentos" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Reconhecimentos</a></li>
+<li><a href="/galeria" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Galeria</a></li>
+<li><a href="/contato" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Contato</a></li>
+</ul>
+</nav>
+<nav aria-label="Conferências internacionais 2026 (sites oficiais)">
+<h3 style="color:#fff;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 12px;">Palestras 2026 — Sites oficiais</h3>
+<ul style="list-style:none;padding:0;margin:0;">
+<li><a href="https://www.namibiaenergyconference.com/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">NIEC — Namibia International Energy Conference (Windhoek, 14 Abril 2026)</a></li>
+<li><a href="https://www.conferenciaminea.com/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">MINEA — 2ª Conferência Internacional sobre Energia e Águas (Luanda, 28-29 Maio 2026)</a></li>
+<li><a href="https://integratedglobal.com/en/events/aimct-angola-2026/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">AIMCT Angola — Asset Integrity, Maintenance, Corrosion &amp; Turnaround (Luanda, 14 Julho 2026)</a></li>
+<li><a href="https://www.namibiaoilandgasconf.com/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">NOGC — Namibia Oil &amp; Gas Conference (Windhoek, 18-20 Agosto 2026)</a></li>
+<li><a href="https://angolaoilandgas.com/attend/pre-conference-program" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">AOG — Angola Oil &amp; Gas (Luanda, 8-10 Setembro 2026)</a></li>
+<li><a href="https://www.angolahubsummit.com/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">AHTLS — Angola Hub Transporte &amp; Logística Summit (Talatona, 28-30 Setembro 2026)</a></li>
+<li><a href="https://aecweek.com/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">AEW — African Energy Week (Cape Town, 12 Outubro 2026)</a></li>
+<li><a href="https://africagaslng.com/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">AGLNG — Africa Gas &amp; LNG Summit (Maputo, 11-13 Novembro 2026)</a></li>
+</ul>
+</nav>
+<nav aria-label="Empresas e produtos">
+<h3 style="color:#fff;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 12px;">Empresas</h3>
+<ul style="list-style:none;padding:0;margin:0;">
+<li><a href="https://www.copiagroupofcompanies.com/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">COPIA Group of Companies, S.A. (criador de Seis, DynamicSim, Quasar)</a></li>
+<li><a href="https://edelphia.vercel.app/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">EDELPHIA (Fundador · data science &amp; algoritmos)</a></li>
+<li><a href="https://www.justificacoesacademicas.org/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">Justificações Acadêmicas (Fundador &amp; CEO · formação profissional)</a></li>
+<li><a href="https://welldesk.io/" target="_blank" rel="noopener" style="color:#cbd5e1;text-decoration:none;display:block;padding:4px 0;">WellDesk (Líder Técnico · Well Log Web Pro)</a></li>
+</ul>
+</nav>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid #1e293b;font-size:12px;color:#64748b;">
+<strong>Edmilson Delfim Praia</strong> · Director de Pesquisa, Desenvolvimento e Tecnologia na COPIA Group of Companies, S.A. · Geocientista-executivo angolano · Doutoramento em Geofísica Aplicada (Universidade Estatal do Petróleo de Ufa) · Contacto: <a href="mailto:praiae180@gmail.com" style="color:#cbd5e1;">praiae180@gmail.com</a> · <a href="https://wa.me/244933514132" style="color:#cbd5e1;">WhatsApp +244 933 514 132</a>
+</div>
+</footer>
+`;
+
 const ROUTES = [
   {
     path: '/sobre',
@@ -73,13 +124,32 @@ function replaceOnce(html, pattern, replacement, label) {
   return after;
 }
 
+function injectStaticFooter(html) {
+  // Insert the static sitemap/conference nav AFTER <div id="root"></div>
+  // so it's part of the body, visible to crawlers, and outside React's root
+  // (so hydration is unaffected).
+  if (html.includes('data-static-sitemap="v1"')) return html; // idempotent
+  const marker = '<div id="root"></div>';
+  if (!html.includes(marker)) {
+    console.warn('  [WARN] <div id="root"></div> marker not found; injection skipped');
+    return html;
+  }
+  const taggedFooter = STATIC_FOOTER_NAV.replace('<footer ', '<footer data-static-sitemap="v1" ');
+  return html.replace(marker, marker + '\n' + taggedFooter);
+}
+
 function main() {
   if (!fs.existsSync(BASE_HTML_PATH)) {
     console.error(`Base HTML not found at ${BASE_HTML_PATH}`);
     process.exit(1);
   }
-  const baseHtml = fs.readFileSync(BASE_HTML_PATH, 'utf-8');
+  let baseHtml = fs.readFileSync(BASE_HTML_PATH, 'utf-8');
   console.log(`Base HTML loaded: ${baseHtml.length} bytes`);
+
+  // 1) Inject the static footer into the homepage build/index.html itself
+  baseHtml = injectStaticFooter(baseHtml);
+  fs.writeFileSync(BASE_HTML_PATH, baseHtml, 'utf-8');
+  console.log(`Homepage patched with static footer: ${baseHtml.length} bytes`);
 
   let generated = 0;
   for (const route of ROUTES) {
