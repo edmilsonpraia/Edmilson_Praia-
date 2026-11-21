@@ -1,8 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ChevronDown, Mail, Phone, MapPin, Award, BookOpen, Code, Globe, Star, Download, Calendar, Building, GraduationCap, FileText, Menu, X, MessageCircle, Send, User, Home, Briefcase, Mic, Camera, Sparkles, Eye, Users } from 'lucide-react';
 import './App.css';
 
+// Route → (section id, PT title, EN title) mapping
+const ROUTE_MAP: Record<string, { section: string; titlePt: string; titleEn: string; descPt: string; descEn: string }> = {
+  '/': {
+    section: 'home',
+    titlePt: 'Edmilson Delfim Praia · COPIA Group of Companies, S.A. · Director de Pesquisa, Desenvolvimento e Tecnologia',
+    titleEn: 'Edmilson Delfim Praia · COPIA Group of Companies, S.A. · Director of Research, Development & Technology',
+    descPt: 'Portfólio oficial · Geocientista-executivo angolano · Criador dos softwares COPIA Seis, DynamicSim e Quasar.',
+    descEn: 'Official portfolio · Angolan geoscientist-executive · Creator of COPIA Seis, DynamicSim and Quasar software.'
+  },
+  '/sobre': { section: 'about', titlePt: 'Perfil · Edmilson Delfim Praia', titleEn: 'Profile · Edmilson Delfim Praia', descPt: 'Perfil profissional completo de Edmilson Delfim Praia — competências, formação e bio.', descEn: 'Full professional profile of Edmilson Delfim Praia — competencies, education and bio.' },
+  '/experiencia': { section: 'experience', titlePt: 'Experiência · Edmilson Delfim Praia', titleEn: 'Experience · Edmilson Delfim Praia', descPt: 'Experiência profissional: COPIA Group, EDELPHIA, Justificações Acadêmicas, WellDesk.', descEn: 'Professional experience: COPIA Group, EDELPHIA, Justificações Acadêmicas, WellDesk.' },
+  '/palestras': { section: 'speaking', titlePt: 'Palestras & Conferências 2026 · Edmilson Delfim Praia', titleEn: '2026 Talks & Conferences · Edmilson Delfim Praia', descPt: '10 palcos continentais em 2026: AGLNG Maputo, AEW Cape Town, AOG Luanda, NIEC Windhoek, MINEA, AIMCT, NOGC, AHTLS, Huawei, Capital Humano.', descEn: '10 African stages in 2026: AGLNG Maputo, AEW Cape Town, AOG Luanda, NIEC Windhoek, MINEA, AIMCT, NOGC, AHTLS, Huawei, Capital Humano.' },
+  '/produtos': { section: 'products', titlePt: 'Produtos & Tecnologias · Edmilson Delfim Praia · COPIA Seis, DynamicSim, Quasar', titleEn: 'Products & Technologies · Edmilson Delfim Praia · COPIA Seis, DynamicSim, Quasar', descPt: 'Criador de 5 produtos de software com IA: COPIA Seis, COPIA DynamicSim, COPIA Quasar, Well Log Web Pro, IA PetroChat.', descEn: 'Creator of 5 AI software products: COPIA Seis, COPIA DynamicSim, COPIA Quasar, Well Log Web Pro, IA PetroChat.' },
+  '/formacao': { section: 'education', titlePt: 'Formação Académica · Edmilson Delfim Praia', titleEn: 'Education · Edmilson Delfim Praia', descPt: 'Doutoramento em Geofísica Aplicada — Universidade Estatal do Petróleo de Ufa, Rússia.', descEn: 'PhD in Applied Geophysics — Russian State University of Petroleum, Ufa.' },
+  '/publicacoes': { section: 'publications', titlePt: 'Publicações & Pesquisa COPIA Seis · Edmilson Delfim Praia', titleEn: 'Publications & COPIA Seis Research · Edmilson Delfim Praia', descPt: '3 artigos flagship COPIA Seis 2026 sobre horizon tracking, cycle skipping e oil-water contact windows.', descEn: '3 flagship COPIA Seis 2026 papers on horizon tracking, cycle skipping and oil-water contact windows.' },
+  '/reconhecimentos': { section: 'awards', titlePt: 'Reconhecimentos & Prémios · Edmilson Delfim Praia', titleEn: 'Awards & Recognitions · Edmilson Delfim Praia', descPt: 'Medalha de Honra da Embaixada de Angola na Rússia · Jovens Cientistas Ufa 2024 · Certificate of Appreciation AIMCT 2026.', descEn: 'Honor Medal from the Embassy of Angola in Russia · Ufa Young Scientists 2024 · AIMCT 2026 Certificate of Appreciation.' },
+  '/galeria': { section: 'gallery', titlePt: 'Galeria Profissional · Edmilson Delfim Praia', titleEn: 'Professional Gallery · Edmilson Delfim Praia', descPt: 'Fotografias profissionais das 10 conferências e eventos 2026.', descEn: 'Professional photographs from 10 conferences and events in 2026.' },
+  '/contato': { section: 'contact', titlePt: 'Contato · Edmilson Delfim Praia · WhatsApp +244 933 514 132', titleEn: 'Contact · Edmilson Delfim Praia · WhatsApp +244 933 514 132', descPt: 'Contato directo via WhatsApp +244 933 514 132 ou email praiae180@gmail.com.', descEn: 'Direct contact via WhatsApp +244 933 514 132 or email praiae180@gmail.com.' }
+};
+
 const Portfolio: React.FC = () => {
+  const location = useLocation();
   const [activeSection, setActiveSection] = useState<string>('home');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -479,6 +501,28 @@ const Portfolio: React.FC = () => {
     setChatMessages([{ role: 'bot', text: UI[siteLang].greet, suggests: [...UI[siteLang].greetSuggests] }]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [siteLang]);
+
+  // Per-route: update document.title + meta description + scroll to section
+  useEffect(() => {
+    const route = ROUTE_MAP[location.pathname] || ROUTE_MAP['/'];
+    const title = siteLang === 'pt' ? route.titlePt : route.titleEn;
+    const desc = siteLang === 'pt' ? route.descPt : route.descEn;
+    document.title = title;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', desc);
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', title);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', desc);
+    // Scroll to section after loading finished
+    if (!isLoading && route.section !== 'home') {
+      setTimeout(() => {
+        const el = document.getElementById(route.section);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setActiveSection(route.section);
+      }, 150);
+    }
+  }, [location.pathname, siteLang, isLoading]);
 
   // Auto-open chat once per session, 2.5s after loading finishes
   useEffect(() => {

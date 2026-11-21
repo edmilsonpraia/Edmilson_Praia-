@@ -106,7 +106,7 @@
             "https://edelphia.vercel.app/",
             "https://www.justificacoesacademicas.org/"
           ],
-          "description": "Geocientista-executivo angolano. Director de Pesquisa, Desenvolvimento e Tecnologia na COPIA Group of Companies, S.A. Fundador da EDELPHIA (Angola) e da Justificações Acadêmicas. Doutoramento em Geofísica Aplicada pela Universidade Estatal do Petróleo de Ufa (Rússia). Criador de 3 produtos COPIA: COPIA Seis (interpretação sísmica com IA), COPIA DynamicSim (modelagem dinâmica de reservatórios) e COPIA Quasar (análise de infraestruturas críticas). Autor de 3 artigos de investigação COPIA Seis em 2026 sobre horizon tracking, cycle skipping e quantificação de incerteza em oil-water contact windows. Speaker, keynote e chairperson em 10 fóruns continentais africanos em 2026: AGLNG Maputo, AEW Cape Town, AOG Luanda, NIEC Windhoek, MINEA, AIMCT, NOGC, AHTLS, Huawei Luanda Innovation Center, Capital Humano."
+          "description": "Geocientista-executivo angolano. Director de Pesquisa, Desenvolvimento e Tecnologia na COPIA Group of Companies, S.A. Fundador da EDELPHIA (Angola) e da Justificações Acadêmicas. Doutoramento em Geofísica Aplicada pela Universidade Estatal do Petróleo de Ufa (Rússia). **Criador, autor e principal arquitecto técnico dos três softwares proprietários da COPIA Group of Companies, S.A.**: COPIA Seis (interpretação sísmica 3-D com módulos de Machine Learning, Deep Learning e GPT), COPIA DynamicSim (simulador dinâmico de reservatórios com IA, PVT Peng-Robinson, Arps e LSTM) e COPIA Quasar (análise de infraestruturas críticas com ML). Também criador da plataforma Well Log Web Pro (WellDesk) e do assistente IA PetroChat (pesquisa própria baseada em LLM). Autor de 3 artigos de investigação COPIA Seis em 2026 sobre horizon tracking, cycle skipping e quantificação de incerteza em oil-water contact windows. Speaker, keynote e chairperson em 10 fóruns continentais africanos em 2026: AGLNG Maputo, AEW Cape Town, AOG Luanda, NIEC Windhoek, MINEA, AIMCT, NOGC, AHTLS, Huawei Luanda Innovation Center, Capital Humano."
         },
         {
           "@type": "WebSite",
@@ -147,9 +147,112 @@
           "address": { "@type": "PostalAddress", "addressCountry": "AO", "addressLocality": "Luanda" },
           "foundingLocation": { "@type": "Place", "address": { "@type": "PostalAddress", "addressCountry": "AO" } },
           "makesOffer": [
-            { "@type": "Product", "name": "COPIA Seis", "description": "AI-powered seismic interpretation platform (Geobody Probe, Seismic Horizons, Machine Learning)." },
-            { "@type": "Product", "name": "COPIA DynamicSim", "description": "100% national dynamic reservoir simulator. Portuguese interface, pricing in kwanzas." },
-            { "@type": "Product", "name": "COPIA Quasar", "description": "Software for national critical infrastructure analysis. Launched at MINEA 2026." }
+            { "@id": "https://www.edmilsondelfimpraia.com/#copia-seis" },
+            { "@id": "https://www.edmilsondelfimpraia.com/#copia-dynamicsim" },
+            { "@id": "https://www.edmilsondelfimpraia.com/#copia-quasar" }
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://www.edmilsondelfimpraia.com/#copia-seis",
+          "name": "COPIA Seis",
+          "alternateName": ["COPIA Six", "Copia Seis"],
+          "applicationCategory": "ScientificApplication",
+          "applicationSubCategory": "3D Seismic Interpretation",
+          "operatingSystem": "Cross-platform (Web / Desktop)",
+          "creator": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "author": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "publisher": { "@id": "https://www.edmilsondelfimpraia.com/#copia" },
+          "copyrightHolder": { "@id": "https://www.edmilsondelfimpraia.com/#copia" },
+          "inLanguage": ["pt-PT", "en"],
+          "description": "COPIA Seis é a plataforma proprietária angolana de interpretação sísmica 3-D assistida por Inteligência Artificial. Desenvolvida e liderada por Edmilson Delfim Praia, Director de Pesquisa, Desenvolvimento e Tecnologia da COPIA Group of Companies, S.A. Inclui módulos de Machine Learning, Deep Learning e GPT para automação de horizon tracking, detecção de cycle skip, extracção de geobodies 3D e imputação de well logs petrofísicos. Reduz o tempo típico de interpretação sísmica de até 24 meses para metade.",
+          "featureList": [
+            "AI-driven automated horizon tracking (seed-based + weak supervision)",
+            "Geobody Probe — extracção de corpos geológicos 3D via ML",
+            "Módulo Machine Learning para detecção de cycle skip silencioso",
+            "Imputação de well logs petrofísicos (RHOB, NPHI) com XGBoost + Random Forest",
+            "Volume rendering como trackability map (opacity-guided picking)",
+            "Integração com fluxos Petrel e ECLIPSE",
+            "Suporte a datasets públicos F3 (North Sea) e proprietários angolanos"
+          ],
+          "softwareRequirements": "Python, bibliotecas ML (XGBoost, TensorFlow)"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://www.edmilsondelfimpraia.com/#copia-dynamicsim",
+          "name": "COPIA DynamicSim",
+          "applicationCategory": "ScientificApplication",
+          "applicationSubCategory": "Reservoir Simulation",
+          "operatingSystem": "Cross-platform (Desktop / Web)",
+          "creator": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "author": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "publisher": { "@id": "https://www.edmilsondelfimpraia.com/#copia" },
+          "copyrightHolder": { "@id": "https://www.edmilsondelfimpraia.com/#copia" },
+          "inLanguage": "pt-PT",
+          "description": "COPIA DynamicSim é o simulador dinâmico de reservatórios 100% angolano, desenvolvido e liderado por Edmilson Delfim Praia na COPIA Group of Companies, S.A. Interface em português, pagamento em kwanzas — alternativa competitiva aos softwares internacionais. Inclui análise PVT com equação Peng-Robinson, modelos de declínio Arps, previsão com LSTM (Deep Learning) em múltiplos cenários e módulos de IA para optimização de produção. Demonstrado publicamente no AGLNG 2026 em Maputo.",
+          "featureList": [
+            "Análise PVT com equação Peng-Robinson (24 componentes, erro médio 2.7%)",
+            "Modelos de declínio Arps calibrados em dados reais (campo Volve/Equinor)",
+            "Previsão de produção com LSTM Deep Learning (optimista/moderado/pessimista)",
+            "Módulo de IA para optimização de curvas de produção",
+            "Interface e documentação em Português",
+            "Pagamento em kwanzas (AOA)"
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://www.edmilsondelfimpraia.com/#copia-quasar",
+          "name": "COPIA Quasar",
+          "applicationCategory": "ScientificApplication",
+          "applicationSubCategory": "Critical Infrastructure Analysis",
+          "operatingSystem": "Cross-platform",
+          "creator": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "author": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "publisher": { "@id": "https://www.edmilsondelfimpraia.com/#copia" },
+          "copyrightHolder": { "@id": "https://www.edmilsondelfimpraia.com/#copia" },
+          "inLanguage": "pt-PT",
+          "description": "COPIA Quasar é o software proprietário para análise de infraestruturas críticas nacionais, desenvolvido e liderado por Edmilson Delfim Praia na COPIA Group of Companies, S.A. Aplica Machine Learning e módulos de IA à avaliação de resiliência de infraestruturas energéticas e industriais. Apresentado publicamente por Edmilson no MINEA 2026 (Ministério da Energia e Águas de Angola, Luanda, 28-29 Maio 2026) na palestra 'Soberania Tecnológica na Análise de Infraestruturas Críticas Utilizando Software QUASAR'.",
+          "featureList": [
+            "Análise de resiliência de infraestruturas críticas",
+            "Módulos de Machine Learning para predição de falhas",
+            "Integração de dados sensoriais e históricos operacionais",
+            "Suporte à soberania tecnológica nacional (Angola)"
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://www.edmilsondelfimpraia.com/#welllogwebpro",
+          "name": "Well Log Web Pro",
+          "applicationCategory": "ScientificApplication",
+          "applicationSubCategory": "Petrophysical Analysis",
+          "operatingSystem": "Web",
+          "creator": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "author": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "publisher": { "@type": "Organization", "name": "WellDesk" },
+          "inLanguage": ["pt-PT", "en"],
+          "description": "Plataforma web criada por Edmilson Delfim Praia na WellDesk. Integra IA (Machine Learning, modelos preditivos) com visualização interactiva para análise, imputação e predição de dados petrofísicos em projectos de reservatórios de óleo e gás. Usa Python, Petrel e ECLIPSE. Reconhecida com o 2º lugar na Conferência de Jovens Cientistas da Universidade de Ufa (2024).",
+          "featureList": [
+            "Visualização interactiva de logs petrofísicos",
+            "Imputação de dados em falta (RHOB, NPHI, GR, DT) com ML",
+            "Modelos preditivos para propriedades de reservatório",
+            "Integração Python + Petrel + ECLIPSE"
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://www.edmilsondelfimpraia.com/#ia-petrochat",
+          "name": "IA PetroChat",
+          "applicationCategory": "ScientificApplication",
+          "applicationSubCategory": "AI Assistant for Petroleum Geoscience",
+          "operatingSystem": "Web",
+          "creator": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "author": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "inLanguage": ["pt-PT", "en"],
+          "description": "Assistente conversacional de IA generativa (baseado em LLM / GPT) desenvolvido por Edmilson Delfim Praia em pesquisa própria. Dirigido a geocientistas e engenheiros de petróleo para apoio à interpretação de dados, tomada de decisão técnica e exploração de workflows em Petrel/ECLIPSE/Python.",
+          "featureList": [
+            "LLM aplicado a geociências de petróleo",
+            "Suporte conversacional técnico em português e inglês",
+            "Integração com dados petrofísicos e sísmicos"
           ]
         },
         {
@@ -200,6 +303,140 @@
           "publisher": { "@id": "https://www.edmilsondelfimpraia.com/#copia" },
           "url": "https://www.edmilsondelfimpraia.com/articles/see_before_you_pick.pdf",
           "keywords": "volume rendering, transfer function, horizon tracking, cycle skipping, seed placement, F3"
+        },
+        {
+          "@type": "Event",
+          "@id": "https://www.edmilsondelfimpraia.com/#event-niec",
+          "name": "NIEC 2026 — Namibia International Energy Conference",
+          "startDate": "2026-04-14T15:15:00+02:00",
+          "endDate": "2026-04-16T18:00:00+02:00",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "location": { "@type": "Place", "name": "Venue 3, Windhoek", "address": { "@type": "PostalAddress", "addressCountry": "NA", "addressLocality": "Windhoek" } },
+          "performer": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "organizer": { "@type": "Organization", "name": "African Energy Chamber & Namibia Chamber of Mines", "url": "https://www.namibiaenergyconference.com/" },
+          "about": "Palestra: Digital Transformation in Reservoir Engineering — Using AI for Integrated Seismic Interpretation and Dynamic Simulation",
+          "url": "https://www.namibiaenergyconference.com/"
+        },
+        {
+          "@type": "Event",
+          "@id": "https://www.edmilsondelfimpraia.com/#event-minea",
+          "name": "MINEA 2026 — 2ª Conferência Internacional sobre Energia e Águas",
+          "startDate": "2026-05-28T14:00:00+01:00",
+          "endDate": "2026-05-29T16:00:00+01:00",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "location": { "@type": "Place", "name": "HCTA · Centro de Convenções de Talatona", "address": { "@type": "PostalAddress", "addressCountry": "AO", "addressLocality": "Luanda" } },
+          "performer": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "organizer": { "@type": "Organization", "name": "Governo de Angola · Ministério da Energia e Águas (MINEA)", "url": "https://www.conferenciaminea.com/" },
+          "sponsor": { "@id": "https://www.edmilsondelfimpraia.com/#copia" },
+          "about": "Speaker + Patrocinador Platina. Lançamento público do COPIA Quasar na palestra 'Soberania Tecnológica na Análise de Infraestruturas Críticas Utilizando Software QUASAR'.",
+          "url": "https://www.conferenciaminea.com/"
+        },
+        {
+          "@type": "Event",
+          "@id": "https://www.edmilsondelfimpraia.com/#event-aimct",
+          "name": "AIMCT Angola 2026 — Asset Integrity, Maintenance, Corrosion & Turnaround Conference",
+          "startDate": "2026-07-14T09:00:00+01:00",
+          "endDate": "2026-07-14T18:00:00+01:00",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "location": { "@type": "Place", "name": "Hotel de Convenções de Talatona (HCTA)", "address": { "@type": "PostalAddress", "addressCountry": "AO", "addressLocality": "Luanda" } },
+          "performer": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "organizer": { "@type": "Organization", "name": "Cogent Solutions" },
+          "about": "Speaker oficial. Edmilson foi premiado com Certificate of Appreciation. Tema: integridade de activos offshore, gestão de corrosão, resiliência de engenharia."
+        },
+        {
+          "@type": "Event",
+          "@id": "https://www.edmilsondelfimpraia.com/#event-nogc",
+          "name": "NOGC 2026 — Namibia Oil & Gas Conference",
+          "startDate": "2026-08-18T09:00:00+02:00",
+          "endDate": "2026-08-20T18:00:00+02:00",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "location": { "@type": "Place", "address": { "@type": "PostalAddress", "addressCountry": "NA", "addressLocality": "Windhoek" } },
+          "performer": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "about": "Speaker + Chairperson. Painel sobre modelagem estática de reservatórios via integração de dados sísmicos e geológicos."
+        },
+        {
+          "@type": "Event",
+          "@id": "https://www.edmilsondelfimpraia.com/#event-capital-humano",
+          "name": "Conferência Nacional sobre o Capital Humano e o Desenvolvimento de Angola",
+          "startDate": "2026-08-29T09:00:00+01:00",
+          "endDate": "2026-08-29T18:00:00+01:00",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "location": { "@type": "Place", "address": { "@type": "PostalAddress", "addressCountry": "AO", "addressLocality": "Luanda" } },
+          "performer": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "organizer": { "@type": "Organization", "name": "UTG/PNFQ · Governo de Angola" },
+          "about": "Participação no âmbito das celebrações dos 50 anos da Independência Nacional de Angola. Cobertura mediática dedicada."
+        },
+        {
+          "@type": "Event",
+          "@id": "https://www.edmilsondelfimpraia.com/#event-aog",
+          "name": "AOG 2026 — Angola Oil & Gas",
+          "startDate": "2026-09-08T09:00:00+01:00",
+          "endDate": "2026-09-10T18:00:00+01:00",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "location": { "@type": "Place", "address": { "@type": "PostalAddress", "addressCountry": "AO", "addressLocality": "Luanda" } },
+          "performer": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "organizer": { "@type": "Organization", "name": "Energy Capital & Power", "url": "https://angolaoilandgas.com/" },
+          "about": "Três participações: painel no palco principal, keynote técnico pré-conferência 'Reconstruction of Missing RHOB and NPHI Well Logs Using Machine Learning' (powered by COPIA), e VIP Breakfast onde discursou sobre os softwares COPIA ao lado do Secretário de Estado angolano.",
+          "url": "https://angolaoilandgas.com/"
+        },
+        {
+          "@type": "Event",
+          "@id": "https://www.edmilsondelfimpraia.com/#event-ahtls",
+          "name": "AHTLS 2026 — Angola Hub Transporte & Logística Summit",
+          "startDate": "2026-09-29T16:00:00+01:00",
+          "endDate": "2026-09-29T17:00:00+01:00",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "location": { "@type": "Place", "name": "Sala Porto do Namibe — CCTA", "address": { "@type": "PostalAddress", "addressCountry": "AO", "addressLocality": "Talatona" } },
+          "performer": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "about": "Workshop: Digitalização, Inteligência Artificial e Automação Logística — Aplicações Práticas."
+        },
+        {
+          "@type": "Event",
+          "@id": "https://www.edmilsondelfimpraia.com/#event-aew",
+          "name": "AEW 2026 — African Energy Week",
+          "startDate": "2026-10-12T10:00:00+02:00",
+          "endDate": "2026-10-12T11:00:00+02:00",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "location": { "@type": "Place", "name": "Cape Town International Convention Centre · Sala 2.4B", "address": { "@type": "PostalAddress", "addressCountry": "ZA", "addressLocality": "Cape Town" } },
+          "performer": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "organizer": { "@type": "Organization", "name": "African Energy Chamber", "url": "https://aecweek.com/" },
+          "about": "Speaker + Chairperson. Palestra oficial 'Building Africa's Subsurface Intelligence Through AI-Driven Seismic Interpretation'. Chair adicional no Exhibition Hall Tech Stage da COPIA Group (Platinum Partner).",
+          "url": "https://aecweek.com/"
+        },
+        {
+          "@type": "Event",
+          "@id": "https://www.edmilsondelfimpraia.com/#event-huawei",
+          "name": "Masterclass COPIA no Huawei Luanda Innovation Center",
+          "startDate": "2026-11-01",
+          "endDate": "2026-11-01",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "location": { "@type": "Place", "name": "Huawei Luanda Innovation Center", "address": { "@type": "PostalAddress", "addressCountry": "AO", "addressLocality": "Luanda" } },
+          "performer": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "about": "Masterclass técnica sobre IA, Machine Learning e Deep Learning aplicados a O&G — taxonomia (ANI/AGI/ASI), aprendizagem supervisionada/não-supervisionada/reforço, implementação prática (Random Forest, XGBoost, ANN, CNN, kMeans, LSTM)."
+        },
+        {
+          "@type": "Event",
+          "@id": "https://www.edmilsondelfimpraia.com/#event-aglng",
+          "name": "AGLNG 2026 — Africa Gas & LNG Summit",
+          "startDate": "2026-11-11T09:00:00+02:00",
+          "endDate": "2026-11-13T18:00:00+02:00",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "location": { "@type": "Place", "name": "Joaquim Chissano International Conference Centre", "address": { "@type": "PostalAddress", "addressCountry": "MZ", "addressLocality": "Maputo" } },
+          "performer": { "@id": "https://www.edmilsondelfimpraia.com/#person" },
+          "sponsor": [
+            { "@id": "https://www.edmilsondelfimpraia.com/#copia" },
+            { "@type": "Person", "name": "H.E. Daniel Chapo", "jobTitle": "Presidente de Moçambique" }
+          ],
+          "organizer": { "@type": "Organization", "name": "Africa Gas & LNG Summit", "url": "https://africagaslng.com/" },
+          "about": "Session 3.1 — Preparing Africa's Workforce for Gas and LNG Projects. Representou a COPIA Group com demonstração técnica do COPIA DynamicSim (análise PVT Peng-Robinson, declínio Arps no campo Volve, previsão LSTM).",
+          "url": "https://africagaslng.com/"
         }
       ]
     }
@@ -246,13 +483,14 @@
 
         <hr>
 
-        <h2>Produtos &amp; Tecnologias (5)</h2>
+        <h2>Produtos &amp; Tecnologias — Criador e Autor Principal: Edmilson Delfim Praia</h2>
+        <p><strong>Edmilson Delfim Praia é o criador, autor e principal arquitecto técnico de 5 produtos de software</strong>, três dos quais pertencem à <strong>COPIA Group of Companies, S.A.</strong> (onde é Director de Pesquisa, Desenvolvimento e Tecnologia). <strong>Todos os produtos integram módulos de Inteligência Artificial</strong> (Machine Learning, Deep Learning e/ou GPT/LLM).</p>
         <ul>
-          <li><strong>COPIA Seis</strong> — Plataforma proprietária de interpretação sísmica assistida por IA. Inclui Geobody Probe, Seismic Horizons e Machine Learning.</li>
-          <li><strong>COPIA DynamicSim</strong> — Simulador dinâmico de reservatórios 100% nacional. Interface em português, pagamento em kwanzas. Demonstrado publicamente no AGLNG 2026 em Maputo.</li>
-          <li><strong>COPIA Quasar</strong> — Software para análise de infraestruturas críticas nacionais. Apresentado publicamente no MINEA 2026 (Luanda) na palestra "Soberania Tecnológica na Análise de Infraestruturas Críticas Utilizando Software QUASAR".</li>
-          <li><strong>Well Log Web Pro</strong> — Plataforma web que integra IA com visualização interativa para análise petrofísica (WellDesk).</li>
-          <li><strong>IA PetroChat</strong> — Assistente conversacional de IA generativa para geocientistas e engenheiros de petróleo (pesquisa própria).</li>
+          <li><strong>COPIA Seis</strong> <em>(COPIA Group of Companies, S.A.)</em> — Criador: <strong>Edmilson Delfim Praia</strong>. Plataforma proprietária angolana de interpretação sísmica 3-D com <strong>módulos de IA (Machine Learning, Deep Learning e GPT)</strong>: Geobody Probe, Seismic Horizons tracking, imputação de well logs via XGBoost/Random Forest, detecção de cycle skip. Reduz tempo de interpretação de 24 meses para metade.</li>
+          <li><strong>COPIA DynamicSim</strong> <em>(COPIA Group of Companies, S.A.)</em> — Criador: <strong>Edmilson Delfim Praia</strong>. Simulador dinâmico de reservatórios 100% nacional, com <strong>módulos de IA</strong>: análise PVT Peng-Robinson, modelo de declínio Arps, previsão com LSTM Deep Learning. Interface em português, pagamento em kwanzas. Demonstrado no AGLNG 2026 em Maputo.</li>
+          <li><strong>COPIA Quasar</strong> <em>(COPIA Group of Companies, S.A.)</em> — Criador: <strong>Edmilson Delfim Praia</strong>. Software para análise de infraestruturas críticas nacionais, com <strong>módulos de Machine Learning</strong> para predição de falhas e resiliência. Apresentado no MINEA 2026 (Luanda) na palestra "Soberania Tecnológica na Análise de Infraestruturas Críticas Utilizando Software QUASAR".</li>
+          <li><strong>Well Log Web Pro</strong> <em>(WellDesk)</em> — Criador: <strong>Edmilson Delfim Praia</strong>. Plataforma web que integra IA com visualização interactiva para análise petrofísica. Premiado com 2º lugar na Conferência de Jovens Cientistas da Universidade de Ufa (2024).</li>
+          <li><strong>IA PetroChat</strong> <em>(pesquisa própria)</em> — Criador: <strong>Edmilson Delfim Praia</strong>. Assistente conversacional baseado em <strong>LLM / GPT</strong> dirigido a geocientistas e engenheiros de petróleo.</li>
         </ul>
 
         <hr>
