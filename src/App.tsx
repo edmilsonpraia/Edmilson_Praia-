@@ -980,6 +980,31 @@ const Portfolio: React.FC = () => {
           textAlign: isMobile ? 'center' : 'left'
         }}>
           <div style={{ width: '100%', maxWidth: isMobile ? '100%' : '720px' }}>
+            {/* Profile avatar */}
+            <div style={{
+              width: isMobile ? '90px' : '110px',
+              height: isMobile ? '90px' : '110px',
+              borderRadius: '50%',
+              overflow: 'hidden',
+              marginBottom: isMobile ? '20px' : '24px',
+              border: '3px solid rgba(96, 165, 250, 0.5)',
+              boxShadow: '0 12px 32px rgba(59, 130, 246, 0.35), 0 0 0 4px rgba(15, 23, 42, 0.6)',
+              background: 'linear-gradient(135deg, #1e40af 0%, #7c3aed 100%)',
+              padding: '2px'
+            }}>
+              <img
+                src="/perfil.webp"
+                alt="Edmilson Delfim Praia"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  display: 'block'
+                }}
+              />
+            </div>
+
             <div style={{
               display: 'flex',
               flexWrap: 'wrap',
@@ -2206,8 +2231,9 @@ const Portfolio: React.FC = () => {
                 { label: 'Localização', value: 'Joaquim Chissano Conf. Centre · Maputo', color: '#86efac' },
                 { label: 'Sessão', value: '3.1 · Dia 3 · 13 Nov 2026', color: '#fcd34d' },
                 { label: 'Representando', value: 'COPIA Group of Companies, S.A.', color: '#f0abfc' },
-                { label: 'Patrono', value: 'H.E. Daniel Chapo · Presidente de Moçambique', color: '#fca5a5' }
-              ].map((stat, i) => (
+                { label: 'Patrono', value: 'H.E. Daniel Chapo · Presidente de Moçambique', color: '#fca5a5' },
+                { label: t('Site oficial', 'Official site'), value: 'africagaslng.com', color: '#7dd3fc', href: 'https://africagaslng.com/' }
+              ].map((stat: any, i) => (
                 <div key={i} style={{
                   padding: '18px 22px',
                   background: 'rgba(255,255,255,0.05)',
@@ -2233,7 +2259,11 @@ const Portfolio: React.FC = () => {
                     marginBottom: '6px'
                   }}>{stat.label}</div>
                   <div style={{ fontSize: '14px', fontWeight: '600', color: 'white', lineHeight: '1.4' }}>
-                    {stat.value}
+                    {stat.href ? (
+                      <a href={stat.href} target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', borderBottom: `1px dashed ${stat.color}`, paddingBottom: '1px' }}>
+                        {stat.value} ↗
+                      </a>
+                    ) : stat.value}
                   </div>
                 </div>
               ))}
@@ -2520,8 +2550,9 @@ const Portfolio: React.FC = () => {
                 { label: 'Localização', value: 'Luanda, Angola', color: '#fdba74' },
                 { label: 'Datas', value: '8–10 Setembro 2026', color: '#fcd34d' },
                 { label: 'Participações', value: 'Painel · Pre-con técnica · VIP Breakfast', color: '#86efac' },
-                { label: 'Softwares apresentados', value: 'COPIA Seis · COPIA DynamicSim · Well Log Pro', color: '#c4b5fd' }
-              ].map((stat, i) => (
+                { label: 'Softwares apresentados', value: 'COPIA Seis · COPIA DynamicSim · Well Log Pro', color: '#c4b5fd' },
+                { label: t('Site oficial', 'Official site'), value: 'angolaoilandgas.com', color: '#fca5a5', href: 'https://angolaoilandgas.com/' }
+              ].map((stat: any, i) => (
                 <div key={i} style={{
                   padding: '18px 22px',
                   background: 'rgba(255,255,255,0.05)',
@@ -2547,7 +2578,11 @@ const Portfolio: React.FC = () => {
                     marginBottom: '6px'
                   }}>{stat.label}</div>
                   <div style={{ fontSize: '14px', fontWeight: '600', color: 'white', lineHeight: '1.4' }}>
-                    {stat.value}
+                    {stat.href ? (
+                      <a href={stat.href} target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', borderBottom: `1px dashed ${stat.color}`, paddingBottom: '1px' }}>
+                        {stat.value} ↗
+                      </a>
+                    ) : stat.value}
                   </div>
                 </div>
               ))}
@@ -3009,8 +3044,9 @@ const Portfolio: React.FC = () => {
                 { label: 'Localização', value: 'Cape Town, África do Sul', color: '#fbbf24' },
                 { label: 'Data', value: '12 Outubro 2026 · 10:00 · Sala 2.4B', color: '#a5b4fc' },
                 { label: 'Papéis', value: 'Speaker (Keynote) + Chairperson (Tech Stage)', color: '#86efac' },
-                { label: 'Representando', value: 'COPIA Group of Companies · Platinum Partner', color: '#c4b5fd' }
-              ].map((stat, i) => (
+                { label: 'Representando', value: 'COPIA Group of Companies · Platinum Partner', color: '#c4b5fd' },
+                { label: t('Site oficial', 'Official site'), value: 'aecweek.com', color: '#fde68a', href: 'https://aecweek.com/' }
+              ].map((stat: any, i) => (
                 <div key={i} style={{
                   padding: '18px 22px',
                   background: 'rgba(255,255,255,0.05)',
@@ -3036,7 +3072,11 @@ const Portfolio: React.FC = () => {
                     marginBottom: '6px'
                   }}>{stat.label}</div>
                   <div style={{ fontSize: '14px', fontWeight: '600', color: 'white', lineHeight: '1.4' }}>
-                    {stat.value}
+                    {stat.href ? (
+                      <a href={stat.href} target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', borderBottom: `1px dashed ${stat.color}`, paddingBottom: '1px' }}>
+                        {stat.value} ↗
+                      </a>
+                    ) : stat.value}
                   </div>
                 </div>
               ))}
@@ -3778,8 +3818,9 @@ const Portfolio: React.FC = () => {
                 { label: 'Localização', value: 'Windhoek, Namíbia · Venue 3', color: '#fbbf24' },
                 { label: 'Data', value: '14 Abril 2026 · Dia 1 · 15:15', color: '#86efac' },
                 { label: 'Papel', value: 'Speaker · Director R&D&T, COPIA Group', color: '#fda4af' },
-                { label: 'Tema', value: 'AI for Seismic Interpretation + Dynamic Simulation', color: '#7dd3fc' }
-              ].map((stat, i) => (
+                { label: 'Tema', value: 'AI for Seismic Interpretation + Dynamic Simulation', color: '#7dd3fc' },
+                { label: t('Site oficial', 'Official site'), value: 'namibiaenergyconference.com', color: '#e9d5ff', href: 'https://www.namibiaenergyconference.com/' }
+              ].map((stat: any, i) => (
                 <div key={i} style={{
                   padding: '18px 22px', background: 'rgba(255,255,255,0.05)',
                   backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)',
@@ -3788,7 +3829,13 @@ const Portfolio: React.FC = () => {
                 onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = stat.color; }}
                 onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}>
                   <div style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.1em', textTransform: 'uppercase', color: stat.color, marginBottom: '6px' }}>{stat.label}</div>
-                  <div style={{ fontSize: '14px', fontWeight: '600', color: 'white', lineHeight: '1.4' }}>{stat.value}</div>
+                  <div style={{ fontSize: '14px', fontWeight: '600', color: 'white', lineHeight: '1.4' }}>
+                    {stat.href ? (
+                      <a href={stat.href} target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', borderBottom: `1px dashed ${stat.color}`, paddingBottom: '1px' }}>
+                        {stat.value} ↗
+                      </a>
+                    ) : stat.value}
+                  </div>
                 </div>
               ))}
             </div>
@@ -3906,8 +3953,9 @@ const Portfolio: React.FC = () => {
                 { label: 'Data', value: '28-29 Maio 2026 · 14h00 – 16h00', color: '#86efac' },
                 { label: 'Tema da palestra', value: 'Soberania Tecnológica · COPIA Quasar', color: '#fcd34d' },
                 { label: 'Papel', value: 'Speaker · Patrocinador Platina', color: '#fda4af' },
-                { label: 'Organização', value: 'Governo de Angola · MINEA · Grupo Arena', color: '#7dd3fc' }
-              ].map((stat, i) => (
+                { label: 'Organização', value: 'Governo de Angola · MINEA · Grupo Arena', color: '#7dd3fc' },
+                { label: t('Site oficial', 'Official site'), value: 'conferenciaminea.com', color: '#bbf7d0', href: 'https://www.conferenciaminea.com/' }
+              ].map((stat: any, i) => (
                 <div key={i} style={{
                   padding: '18px 22px', background: 'rgba(255,255,255,0.05)',
                   backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)',
@@ -3916,7 +3964,13 @@ const Portfolio: React.FC = () => {
                 onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = stat.color; }}
                 onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}>
                   <div style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.1em', textTransform: 'uppercase', color: stat.color, marginBottom: '6px' }}>{stat.label}</div>
-                  <div style={{ fontSize: '14px', fontWeight: '600', color: 'white', lineHeight: '1.4' }}>{stat.value}</div>
+                  <div style={{ fontSize: '14px', fontWeight: '600', color: 'white', lineHeight: '1.4' }}>
+                    {stat.href ? (
+                      <a href={stat.href} target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none', borderBottom: `1px dashed ${stat.color}`, paddingBottom: '1px' }}>
+                        {stat.value} ↗
+                      </a>
+                    ) : stat.value}
+                  </div>
                 </div>
               ))}
             </div>

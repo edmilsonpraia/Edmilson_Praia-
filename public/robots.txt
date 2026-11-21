@@ -1,3 +1,66 @@
-# https://www.robotstxt.org/robotstxt.html
+# robots.txt for edmilsondelfimpraia.com
+# Full access granted to all search engines and AI systems.
+
 User-agent: *
-Disallow:
+Allow: /
+
+# ----- OpenAI / ChatGPT -----
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# ----- Anthropic / Claude -----
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# ----- Perplexity -----
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# ----- Google (search + AI/Gemini) -----
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# ----- Bing / Microsoft Copilot -----
+User-agent: Bingbot
+Allow: /
+
+# ----- Apple -----
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# ----- Common Crawl (used to train many LLMs) -----
+User-agent: CCBot
+Allow: /
+
+# ----- Other -----
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+Sitemap: https://www.edmilsondelfimpraia.com/sitemap.xml
