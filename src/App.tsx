@@ -221,11 +221,11 @@ const Portfolio: React.FC = () => {
       id: 'welldesk',
       keywords: ['welldesk', 'well log', 'web pro', 'analista', 'analyst', 'dados', 'data', 'petrofísico', 'petrofísica', 'petrophysics'],
       pt: {
-        answer: 'Na WellDesk, Edmilson é Analista de Dados e Líder Técnico. Desenvolveu a plataforma Well Log Web Pro, integrando IA com visualização interativa para análise, imputação e predição de dados petrofísicos. Usa Python, Petrel e ECLIPSE em projetos de modelagem geológica.',
+        answer: 'Na WellDesk (welldesk.io), Edmilson é Analista de Dados e Líder Técnico. Desenvolveu a plataforma Well Log Web Pro, integrando IA com visualização interativa para análise, imputação e predição de dados petrofísicos. Usa Python, Petrel e ECLIPSE em projetos de modelagem geológica.',
         suggests: ['Como funciona o Well Log Web Pro?']
       },
       en: {
-        answer: 'At WellDesk, Edmilson is Data Analyst and Technical Lead. Developed the Well Log Web Pro platform, integrating AI with interactive visualization for analysis, imputation and prediction of petrophysical data. Uses Python, Petrel and ECLIPSE in geological modeling projects.',
+        answer: 'At WellDesk (welldesk.io), Edmilson is Data Analyst and Technical Lead. Developed the Well Log Web Pro platform, integrating AI with interactive visualization for analysis, imputation and prediction of petrophysical data. Uses Python, Petrel and ECLIPSE in geological modeling projects.',
         suggests: ['How does Well Log Web Pro work?']
       },
       section: 'experience',
@@ -1776,9 +1776,9 @@ const Portfolio: React.FC = () => {
                   }} />
                 </button>
 
-                {(experience.company === 'EDELPHIA' || experience.company === 'Justificações Acadêmicas') && (
+                {(experience.company === 'EDELPHIA' || experience.company === 'Justificações Acadêmicas' || experience.company === 'WellDesk') && (
                   <a
-                    href={experience.company === 'EDELPHIA' ? 'https://edelphia.vercel.app/' : 'https://www.justificacoesacademicas.org/'}
+                    href={experience.company === 'EDELPHIA' ? 'https://edelphia.vercel.app/' : experience.company === 'WellDesk' ? 'https://welldesk.io/' : 'https://www.justificacoesacademicas.org/'}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
@@ -1810,7 +1810,7 @@ const Portfolio: React.FC = () => {
                     }}
                   >
                     <Globe size={14} />
-                    {experience.company === 'EDELPHIA' ? t('Visitar edelphia.vercel.app', 'Visit edelphia.vercel.app') : t('Visitar justificacoesacademicas.org', 'Visit justificacoesacademicas.org')}
+                    {experience.company === 'EDELPHIA' ? t('Visitar edelphia.vercel.app', 'Visit edelphia.vercel.app') : experience.company === 'WellDesk' ? t('Visitar welldesk.io', 'Visit welldesk.io') : t('Visitar justificacoesacademicas.org', 'Visit justificacoesacademicas.org')}
                   </a>
                 )}
               </div>
@@ -2215,7 +2215,7 @@ const Portfolio: React.FC = () => {
             maxWidth: '820px',
             marginBottom: isMobile ? '36px' : '56px'
           }}>
-            "Preparing Africa's Workforce for Gas and LNG Projects" — Dr. Edmilson Praia representou a COPIA Group of Companies no palco oficial do Africa Gas & LNG Summit no Centro Internacional de Conferências Joaquim Chissano, Maputo (11–13 Nov 2026). Evento sob alto patrocínio de H.E. Daniel Chapo, Presidente de Moçambique, com parceria ENH, INP e Ministério dos Recursos Minerais e Energia.
+            "Preparing Africa's Workforce for Gas and LNG Projects" — Edmilson Delfim Praia representou a COPIA Group of Companies no palco oficial do Africa Gas & LNG Summit no Centro Internacional de Conferências Joaquim Chissano, Maputo (11–13 Nov 2026). Evento sob alto patrocínio de H.E. Daniel Chapo, Presidente de Moçambique, com parceria ENH, INP e Ministério dos Recursos Minerais e Energia.
           </p>
 
           {/* Hero photo + stats grid */}
@@ -2234,7 +2234,7 @@ const Portfolio: React.FC = () => {
             }}>
               <img
                 src="/aglng/_Y2A6113.jpg"
-                alt="Dr. Edmilson Praia · Session 3.1 · AGLNG 2026 Maputo"
+                alt="Edmilson Delfim Praia · Session 3.1 · AGLNG 2026 Maputo"
                 style={{
                   width: '100%',
                   height: isMobile ? '280px' : '480px',
@@ -2347,7 +2347,7 @@ const Portfolio: React.FC = () => {
               {
                 src: '/aglng/_Y2A6181.jpg',
                 title: 'Apresentação oficial',
-                caption: 'Slide institucional "Dr. Edmilson Praia · Director · Copia Group" no palco AGLNG.'
+                caption: 'Slide institucional "Edmilson Delfim Praia · Director · Copia Group" no palco AGLNG.'
               },
               {
                 src: '/aglng/_Y2A6027.jpg',
@@ -2531,7 +2531,7 @@ const Portfolio: React.FC = () => {
             maxWidth: '860px',
             marginBottom: isMobile ? '36px' : '56px'
           }}>
-            Em Luanda, Dr. Edmilson Praia marcou presença em três momentos distintos do AOG 2026:
+            Em Luanda, Edmilson Delfim Praia marcou presença em três momentos distintos do AOG 2026:
             um <strong style={{ color: 'white' }}>painel oficial</strong> no palco principal,
             uma <strong style={{ color: 'white' }}>apresentação técnica pre-conferência</strong> powered by COPIA,
             e um <strong style={{ color: 'white' }}>VIP Breakfast</strong> onde discursou sobre os softwares que desenvolveu, ao lado do Secretário de Estado.
@@ -2553,7 +2553,7 @@ const Portfolio: React.FC = () => {
             }}>
               <img
                 src="/aog/55522436114_246c464c39_z.jpg"
-                alt="Dr. Edmilson Praia · AOG 2026 VIP Breakfast · COPIA Group"
+                alt="Edmilson Delfim Praia · AOG 2026 VIP Breakfast · COPIA Group"
                 style={{
                   width: '100%',
                   height: isMobile ? '280px' : '480px',
@@ -2873,7 +2873,7 @@ const Portfolio: React.FC = () => {
                 lineHeight: '1.7',
                 margin: 0
               }}>
-                No Pequeno-Almoço VIP da COPIA Group, sob a assinatura "See Beyond The Surface", Dr. Edmilson Praia discursou sobre os softwares que lidera no desenvolvimento — <strong style={{ color: 'white' }}>COPIA Seis</strong> (interpretação sísmica com IA) e <strong style={{ color: 'white' }}>COPIA DynamicSim</strong> (modelagem dinâmica de reservatórios) — ao lado do Secretário de Estado angolano. Um momento de afirmação institucional do produto tecnológico nacional perante stakeholders de alto nível.
+                No Pequeno-Almoço VIP da COPIA Group, sob a assinatura "See Beyond The Surface", Edmilson Delfim Praia discursou sobre os softwares que lidera no desenvolvimento — <strong style={{ color: 'white' }}>COPIA Seis</strong> (interpretação sísmica com IA) e <strong style={{ color: 'white' }}>COPIA DynamicSim</strong> (modelagem dinâmica de reservatórios) — ao lado do Secretário de Estado angolano. Um momento de afirmação institucional do produto tecnológico nacional perante stakeholders de alto nível.
               </p>
             </div>
           </div>
@@ -3028,7 +3028,7 @@ const Portfolio: React.FC = () => {
             maxWidth: '860px',
             marginBottom: isMobile ? '36px' : '56px'
           }}>
-            No maior palco de energia do continente, Dr. Edmilson Praia representou a COPIA Group of Companies com duplo papel: <strong style={{ color: 'white' }}>speaker na sessão oficial</strong> "Building Africa's Subsurface Intelligence Through AI-Driven Seismic Interpretation" (Sala 2.4B · 12 Out 2026) e <strong style={{ color: 'white' }}>chairperson no Exhibition Hall Tech Stage</strong>, onde apresentou as capacidades da COPIA perante o ecossistema energético africano.
+            No maior palco de energia do continente, Edmilson Delfim Praia representou a COPIA Group of Companies com duplo papel: <strong style={{ color: 'white' }}>speaker na sessão oficial</strong> "Building Africa's Subsurface Intelligence Through AI-Driven Seismic Interpretation" (Sala 2.4B · 12 Out 2026) e <strong style={{ color: 'white' }}>chairperson no Exhibition Hall Tech Stage</strong>, onde apresentou as capacidades da COPIA perante o ecossistema energético africano.
           </p>
 
           {/* Hero + stats */}
@@ -3047,7 +3047,7 @@ const Portfolio: React.FC = () => {
             }}>
               <img
                 src="/aew/aew-5.webp"
-                alt="Dr. Edmilson Praia · AEW 2026 Cape Town"
+                alt="Edmilson Delfim Praia · AEW 2026 Cape Town"
                 style={{
                   width: '100%',
                   height: isMobile ? '280px' : '480px',
@@ -3369,7 +3369,7 @@ const Portfolio: React.FC = () => {
                 lineHeight: '1.7',
                 margin: 0
               }}>
-                Troca entre Dr. Edmilson Praia e os delegados do AEW 2026 — reguladores, operadores, investidores e pares africanos que moldam o futuro energético do continente.
+                Troca entre Edmilson Delfim Praia e os delegados do AEW 2026 — reguladores, operadores, investidores e pares africanos que moldam o futuro energético do continente.
               </p>
             </div>
           </div>
@@ -3525,7 +3525,7 @@ const Portfolio: React.FC = () => {
             maxWidth: '860px',
             marginBottom: isMobile ? '36px' : '56px'
           }}>
-            Na <strong style={{ color: 'white' }}>Asset Integrity, Maintenance, Corrosion & Turnaround Conference Angola 2026</strong>, Dr. Edmilson Praia foi orador oficial representando a COPIA Group of Companies — trazendo a aplicação da IA e da análise avançada de dados para o tema crítico da <strong style={{ color: 'white' }}>integridade de activos offshore envelhecidos</strong> em Angola. Certificado de Appreciation entregue pela organização (Cogent Solutions).
+            Na <strong style={{ color: 'white' }}>Asset Integrity, Maintenance, Corrosion & Turnaround Conference Angola 2026</strong>, Edmilson Delfim Praia foi orador oficial representando a COPIA Group of Companies — trazendo a aplicação da IA e da análise avançada de dados para o tema crítico da <strong style={{ color: 'white' }}>integridade de activos offshore envelhecidos</strong> em Angola. Certificado de Appreciation entregue pela organização (Cogent Solutions).
           </p>
 
           {/* Hero + stats */}
@@ -3544,7 +3544,7 @@ const Portfolio: React.FC = () => {
             }}>
               <img
                 src="/asset/aimct-podium-2.jpeg"
-                alt="Dr. Edmilson Praia · AIMCT Angola 2026 · TD Hotels HCTA Luanda"
+                alt="Edmilson Delfim Praia · AIMCT Angola 2026 · TD Hotels HCTA Luanda"
                 style={{
                   width: '100%',
                   height: isMobile ? '320px' : '520px',
@@ -3704,7 +3704,7 @@ const Portfolio: React.FC = () => {
               {
                 src: '/asset/aimct-podium-1.jpeg',
                 title: 'Apresentação técnica ao auditório',
-                caption: 'Dr. Edmilson Praia discursando no púlpito TD HOTELS · HCTA Luanda, trazendo IA e análise avançada ao debate sobre integridade de activos offshore angolanos.',
+                caption: 'Edmilson Delfim Praia discursando no púlpito TD HOTELS · HCTA Luanda, trazendo IA e análise avançada ao debate sobre integridade de activos offshore angolanos.',
                 accent: '#7dd3fc'
               },
               {
@@ -3826,7 +3826,7 @@ const Portfolio: React.FC = () => {
             fontSize: isMobile ? '15px' : '17px', color: '#ede9fe',
             lineHeight: '1.7', maxWidth: '860px', marginBottom: isMobile ? '36px' : '56px'
           }}>
-            Na <strong style={{ color: 'white' }}>Namibia International Energy Conference 2026</strong> — o maior fórum energético da Namíbia sob o tema "The Road to First & Beyond" — Dr. Edmilson Praia foi orador oficial no Dia 1 (14 Abr, 15:15, Venue 3) com a palestra <em>"Using Artificial Intelligence for Integrated Seismic Interpretation and Dynamic Simulation"</em>, representando a COPIA Group of Companies perante autoridades namibianas e investidores internacionais.
+            Na <strong style={{ color: 'white' }}>Namibia International Energy Conference 2026</strong> — o maior fórum energético da Namíbia sob o tema "The Road to First & Beyond" — Edmilson Delfim Praia foi orador oficial no Dia 1 (14 Abr, 15:15, Venue 3) com a palestra <em>"Using Artificial Intelligence for Integrated Seismic Interpretation and Dynamic Simulation"</em>, representando a COPIA Group of Companies perante autoridades namibianas e investidores internacionais.
           </p>
 
           <div style={{
@@ -3838,7 +3838,7 @@ const Portfolio: React.FC = () => {
               border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
               position: 'relative'
             }}>
-              <img src="/niec/niec-03.jpeg" alt="Dr. Edmilson Praia · NIEC 2026 Windhoek" style={{
+              <img src="/niec/niec-03.jpeg" alt="Edmilson Delfim Praia · NIEC 2026 Windhoek" style={{
                 width: '100%', height: isMobile ? '320px' : '520px',
                 objectFit: 'cover', display: 'block'
               }} />
@@ -3971,7 +3971,7 @@ const Portfolio: React.FC = () => {
             fontSize: isMobile ? '15px' : '17px', color: '#dcfce7',
             lineHeight: '1.7', maxWidth: '880px', marginBottom: isMobile ? '36px' : '56px'
           }}>
-            Na <strong style={{ color: 'white' }}>2ª Conferência Internacional sobre Energia e Águas & Exposição</strong> promovida pelo Ministério da Energia e Águas de Angola (sob o tema "Servindo o País Rumo à Sustentabilidade · 50 Anos"), Dr. Edmilson Praia apresentou como speaker a palestra <em>"Soberania Tecnológica na Análise de Infraestruturas Críticas Utilizando Software QUASAR"</em> — marco de apresentação pública do mais novo produto COPIA, dedicado à análise de infraestruturas críticas nacionais.
+            Na <strong style={{ color: 'white' }}>2ª Conferência Internacional sobre Energia e Águas & Exposição</strong> promovida pelo Ministério da Energia e Águas de Angola (sob o tema "Servindo o País Rumo à Sustentabilidade · 50 Anos"), Edmilson Delfim Praia apresentou como speaker a palestra <em>"Soberania Tecnológica na Análise de Infraestruturas Críticas Utilizando Software QUASAR"</em> — marco de apresentação pública do mais novo produto COPIA, dedicado à análise de infraestruturas críticas nacionais.
           </p>
 
           <div style={{
@@ -4108,7 +4108,7 @@ const Portfolio: React.FC = () => {
             fontSize: isMobile ? '15px' : '17px', color: '#fecaca',
             lineHeight: '1.7', maxWidth: '870px', marginBottom: isMobile ? '36px' : '56px'
           }}>
-            Masterclass técnica no <strong style={{ color: 'white' }}>Huawei Luanda Innovation Center</strong>, onde Dr. Edmilson Praia liderou a formação sobre Inteligência Artificial aplicada à ciência de dados do petróleo — da taxonomia IA/ML/DL (ANI, AGI, ASI; aprendizagem supervisionada, não-supervisionada, por reforço) até à implementação prática com Random Forest, XGBoost, ANN, CNN, kMeans e LSTM. Auditório Huawei lotado com formandos angolanos.
+            Masterclass técnica no <strong style={{ color: 'white' }}>Huawei Luanda Innovation Center</strong>, onde Edmilson Delfim Praia liderou a formação sobre Inteligência Artificial aplicada à ciência de dados do petróleo — da taxonomia IA/ML/DL (ANI, AGI, ASI; aprendizagem supervisionada, não-supervisionada, por reforço) até à implementação prática com Random Forest, XGBoost, ANN, CNN, kMeans e LSTM. Auditório Huawei lotado com formandos angolanos.
           </p>
 
           <div style={{
@@ -4246,7 +4246,7 @@ const Portfolio: React.FC = () => {
             fontSize: isMobile ? '15px' : '17px', color: '#fecaca',
             lineHeight: '1.7', maxWidth: '880px', marginBottom: isMobile ? '36px' : '56px'
           }}>
-            Dr. Edmilson Praia participou na <strong style={{ color: 'white' }}>Conferência Nacional sobre o Capital Humano e o Desenvolvimento de Angola</strong>, organizada pelo Governo de Angola através da UTG/PNFQ (Unidade Técnica de Gestão · Plano Nacional de Formação de Quadros), no âmbito das celebrações dos <strong style={{ color: 'white' }}>50 anos da Independência Nacional</strong>. Representou a nova geração angolana de executivos em ciência e tecnologia, com cobertura mediática dedicada.
+            Edmilson Delfim Praia participou na <strong style={{ color: 'white' }}>Conferência Nacional sobre o Capital Humano e o Desenvolvimento de Angola</strong>, organizada pelo Governo de Angola através da UTG/PNFQ (Unidade Técnica de Gestão · Plano Nacional de Formação de Quadros), no âmbito das celebrações dos <strong style={{ color: 'white' }}>50 anos da Independência Nacional</strong>. Representou a nova geração angolana de executivos em ciência e tecnologia, com cobertura mediática dedicada.
           </p>
 
           <div style={{
@@ -4405,7 +4405,7 @@ const Portfolio: React.FC = () => {
               {
                 name: 'COPIA Quasar',
                 tagline: 'Critical Infrastructure Analysis',
-                description: 'Software dedicado à análise de infraestruturas críticas nacionais. Apresentado publicamente por Dr. Edmilson Praia na MINEA 2026 (Ministério da Energia e Águas) sob o tema "Soberania Tecnológica".',
+                description: 'Software dedicado à análise de infraestruturas críticas nacionais. Apresentado publicamente por Edmilson Delfim Praia na MINEA 2026 (Ministério da Energia e Águas) sob o tema "Soberania Tecnológica".',
                 features: ['Infraestrutura crítica', 'Soberania tecnológica', 'Lançamento MINEA 2026'],
                 image: '/minea/minea-08-poster.jpeg',
                 company: 'COPIA Group',
@@ -5596,7 +5596,7 @@ const Portfolio: React.FC = () => {
               {t('Especializado em geociências de petróleo, modelagem de reservatórios e análise de dados baseada em IA', 'Specialized in petroleum geosciences, reservoir modeling and AI-based data analysis')}
             </p>
             <a
-              href="https://wa.me/244933514132?text=Ol%C3%A1%20Dr.%20Edmilson%2C%20gostaria%20de%20agendar%20uma%20consultoria."
+              href="https://wa.me/244933514132?text=Ol%C3%A1%20Edmilson%2C%20gostaria%20de%20agendar%20uma%20consultoria."
               target="_blank"
               rel="noopener noreferrer"
               style={{
